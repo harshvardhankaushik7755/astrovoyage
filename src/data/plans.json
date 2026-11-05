@@ -1,0 +1,83 @@
+{
+  "fit": {
+    "_why": "Orbit fit is a multiplier on science. These cut-offs only choose the word shown to the player.",
+    "great": 1.2, "good": 1.0, "ok": 0.8,
+    "words": { "great": "Great for this goal", "good": "Good for this goal", "ok": "OK for this goal", "poor": "Poor for this goal" }
+  },
+  "instrumentWords": { "boost": "⭐ Great for your goal", "weak": "Less useful for your goal" },
+  "text": {
+    "title": "Mission plan",
+    "goalStep": "1. What is your mission for?",
+    "orbitStep": "2. Which orbit will you go into?",
+    "orbitHelp": "An orbit is the path your spacecraft takes round {target}. Lower orbits see more detail but need a bigger braking burn, which means more fuel.",
+    "bestTools": "Best tools:",
+    "brake": "Braking burn",
+    "loop": "One loop",
+    "next": "Next: build the spacecraft →",
+    "back": "← Choose another mission",
+    "change": "Change plan",
+    "changesTitle": "What your plan changes",
+    "changesScience": "🔬 The goal decides which instruments score the most science points.",
+    "changesFuel": "⛽ The orbit decides how hard you must brake at {target}, so how much fuel you carry. A good match between goal and orbit scores extra points.",
+    "planLine": "Goal: {goal} · Orbit: {orbit}"
+  },
+  "byScenario": {
+    "moon": {
+      "body": { "muKm3s2": 4902.8, "radiusKm": 1737.4, "arrivalSpeedKmS": 0.78 },
+      "defaultOrbit": "low",
+      "orbits": [
+        { "id": "low", "icon": "⭕", "name": "Low circle", "size": "100 km up", "periapsisKm": 100, "apoapsisKm": 100,
+          "short": "Very close to the ground. Sharp pictures of every spot.", "like": "Like NASA's LRO" },
+        { "id": "oval", "icon": "🥚", "name": "Long oval", "size": "100 to 5,000 km up", "periapsisKm": 100, "apoapsisKm": 5000,
+          "short": "Dips close, then swings far away. Needs half the braking.", "like": "Like Chandrayaan-3's first orbit" }
+      ],
+      "objectives": [
+        { "id": "map", "icon": "🗺️", "name": "Map the Moon", "short": "Take pictures of the whole Moon.",
+          "instruments": {}, "key": ["camera", "magnetometer"], "orbitFit": { "low": 1.0, "oval": 0.6 } },
+        { "id": "ice", "icon": "🧊", "name": "Hunt for water ice", "short": "Find ice hiding in dark craters at the poles.",
+          "instruments": { "spectrometer": 1.5, "radar": 1.5, "camera": 0.75, "magnetometer": 0.75, "weather": 0.5 },
+          "key": ["spectrometer", "radar"], "orbitFit": { "low": 1.2, "oval": 0.6 } },
+        { "id": "magnet", "icon": "🧲", "name": "Study the Moon's magnetism", "short": "Measure the old magnetic patches in the rocks.",
+          "instruments": { "magnetometer": 2.0, "camera": 0.75, "spectrometer": 0.75, "radar": 0.75, "weather": 0.5 },
+          "key": ["magnetometer"], "orbitFit": { "low": 1.1, "oval": 1.0 } }
+      ]
+    },
+    "mars": {
+      "body": { "muKm3s2": 42828, "radiusKm": 3389.5, "arrivalSpeedKmS": 3.05 },
+      "defaultOrbit": "oval",
+      "orbits": [
+        { "id": "oval", "icon": "🥚", "name": "Long oval", "size": "420 to 77,000 km up", "periapsisKm": 420, "apoapsisKm": 77000,
+          "short": "Cheap to get into. Far away most of the time, so it sees the whole planet.", "like": "Like ISRO's Mangalyaan" },
+        { "id": "low", "icon": "⭕", "name": "Low circle", "size": "400 km up", "periapsisKm": 400, "apoapsisKm": 400,
+          "short": "Close and sharp, but needs more than twice the braking.", "like": "Like NASA's MRO" }
+      ],
+      "objectives": [
+        { "id": "photos", "icon": "📸", "name": "Send back photos of Mars", "short": "Reach Mars orbit and take pictures.",
+          "instruments": {}, "key": ["camera"], "orbitFit": { "oval": 1.0, "low": 1.4 } },
+        { "id": "weather", "icon": "🌪️", "name": "Watch the dust storms", "short": "Follow Mars weather across the whole planet.",
+          "instruments": { "weather": 2.0, "camera": 1.5, "spectrometer": 0.75, "radar": 0.5, "magnetometer": 0.75 },
+          "key": ["weather", "camera"], "orbitFit": { "oval": 1.3, "low": 0.8 } },
+        { "id": "water", "icon": "💧", "name": "Look for buried water", "short": "Find ice and old rivers under the dust.",
+          "instruments": { "radar": 1.5, "spectrometer": 1.5, "camera": 0.75, "weather": 0.5, "magnetometer": 0.75 },
+          "key": ["radar", "spectrometer"], "orbitFit": { "oval": 0.6, "low": 1.3 } }
+      ]
+    },
+    "jupiter": {
+      "body": { "muKm3s2": 126686534, "radiusKm": 71492, "arrivalSpeedKmS": 5.64 },
+      "defaultOrbit": "close",
+      "orbits": [
+        { "id": "close", "icon": "🎢", "name": "Close dives", "size": "4,200 km above the clouds, then far out", "periapsisKm": 4200, "apoapsisKm": 8033000,
+          "short": "Skims over the clouds every 53 days. Diving deep makes the burn small.", "like": "Like NASA's Juno" },
+        { "id": "wide", "icon": "🌌", "name": "Wide loops", "size": "214,000 km up, then very far out", "periapsisKm": 214000, "apoapsisKm": 19360000,
+          "short": "Stays far from the clouds and passes near the big moons.", "like": "Like NASA's Galileo" }
+      ],
+      "objectives": [
+        { "id": "clouds", "icon": "🌀", "name": "Study clouds and magnetism", "short": "Look at Jupiter's storms and its huge magnetic field.",
+          "instruments": {}, "key": ["camera", "magnetometer"], "orbitFit": { "close": 1.0, "wide": 0.6 } },
+        { "id": "moons", "icon": "🌙", "name": "Explore the icy moons", "short": "Look for the hidden oceans under Europa's ice.",
+          "instruments": { "radar": 1.5, "spectrometer": 1.5, "magnetometer": 1.5, "camera": 1.0, "weather": 0.5 },
+          "key": ["radar", "spectrometer", "magnetometer"], "orbitFit": { "close": 0.6, "wide": 1.3 } }
+      ]
+    }
+  }
+}

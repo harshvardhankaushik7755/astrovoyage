@@ -1,0 +1,72 @@
+[
+  {
+    "what": "Fuel and speed (Δv)",
+    "kind": "formula",
+    "detail": "Tsiolkovsky rocket equation: Δv = Isp × g₀ × ln(m₀ / mf), with g₀ = 9.80665 m/s². It is the same equation every real rocket is designed with."
+  },
+  {
+    "what": "Sunlight on the panels",
+    "kind": "formula",
+    "detail": "Inverse-square law: power ÷ distance². Mars gets about 43% of Earth's sunlight, Jupiter about 3.7%."
+  },
+  {
+    "what": "Signal delay",
+    "kind": "formula",
+    "detail": "Light takes 8.317 minutes to cross one AU, so the delay is the distance in AU × 8.317 minutes each way."
+  },
+  {
+    "what": "Where the spacecraft is on the map",
+    "kind": "formula",
+    "detail": "A Hohmann transfer half-ellipse, timed with Kepler's equation, so the spacecraft really does move fast near the Sun and slowly far away."
+  },
+  {
+    "what": "Launch windows",
+    "kind": "real",
+    "detail": "Mars lines up with Earth about every 26 months, Jupiter about every 13. The Moon needs no window at all."
+  },
+  {
+    "what": "Trip times",
+    "kind": "real",
+    "detail": "Rounded from real mission durations: about 3 days to the Moon, 8 months to Mars, 5 years to Jupiter."
+  },
+  {
+    "what": "Engine performance (Isp)",
+    "kind": "real",
+    "detail": "Chemical engines really do reach about 320 seconds and ion engines about 3000, which is why an ion engine needs so little fuel."
+  },
+  {
+    "what": "The real missions we compare you with",
+    "kind": "real",
+    "detail": "Chandrayaan-2, Lunar Reconnaissance Orbiter, Mangalyaan, MAVEN, Juno and Galileo, with their real agencies and launch years."
+  },
+  {
+    "what": "The stories on the challenge cards",
+    "kind": "real",
+    "detail": "Every \"Real story\" line is something that happened to a real spacecraft, with the year it happened."
+  },
+  {
+    "what": "Part masses, power and costs",
+    "kind": "game",
+    "detail": "Chosen to make the choices interesting and the numbers easy to hold in your head. A real spacecraft part list is far longer."
+  },
+  {
+    "what": "Mission budgets",
+    "kind": "game",
+    "detail": "$250M, $150M and $900M. Real missions cost more, but the shape of the choice is the same: every kilogram costs money."
+  },
+  {
+    "what": "Science points",
+    "kind": "game",
+    "detail": "A made-up score for what each instrument is worth, so missions can be compared. Real science is not a number."
+  },
+  {
+    "what": "How likely each challenge is",
+    "kind": "game",
+    "detail": "Tuned so a careful design usually survives and a tight one sometimes does not. The events themselves are real kinds of trouble."
+  },
+  {
+    "what": "How much a challenge costs you",
+    "kind": "game",
+    "detail": "The fuel, science and power a choice costs are game values, picked so no single card can end a well-built mission on its own."
+  }
+]

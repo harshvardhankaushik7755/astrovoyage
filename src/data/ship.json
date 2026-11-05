@@ -1,0 +1,14 @@
+{
+  "note": "How big each part is drawn, in ship units. Every size is worked out from a real number in parts.json, so a part that is bigger in the design is bigger on screen.",
+  "bus": { "massScale": 1.55, "aspect": 0.78 },
+  "panel": { "powerScale": 0.37, "widthShare": 0.72, "gap": 1.2 },
+  "rtg": { "massScale": 1.6, "aspect": 0.6, "gap": 1.1, "fins": 3 },
+  "dish": { "dataScale": 0.85, "rim": 1, "depthShare": 0.56, "mast": 2 },
+  "sensor": { "massScale": 0.8, "minSize": 1.2, "outShare": 0.25 },
+  "engine": {
+    "chemical": { "length": 3.2, "mouth": 4.4 },
+    "ion": { "length": 5.6, "mouth": 3.4, "grids": 3 }
+  },
+  "sprite": { "mapUnitsPerShipUnit": 0.62, "maxMapUnits": 24, "haloShare": 0.32, "minHaloMapUnits": 6 },
+  "schematic": { "box": 160, "pad": 12 }
+}

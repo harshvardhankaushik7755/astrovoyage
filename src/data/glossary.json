@@ -1,0 +1,78 @@
+[
+  {
+    "term": "Delta-v (Δv)",
+    "meaning": "How much the spacecraft must change its speed to make a trip. More Δv = more fuel."
+  },
+  {
+    "term": "Isp",
+    "meaning": "How efficient an engine is. A higher number means it needs less fuel."
+  },
+  {
+    "term": "Rocket equation",
+    "meaning": "The formula that links fuel, mass and Δv."
+  },
+  {
+    "term": "Launch window",
+    "meaning": "The short period when Earth and the target planet are in the right positions, so the spacecraft can reach the planet with a normal amount of fuel."
+  },
+  {
+    "term": "Transfer orbit",
+    "meaning": "The curved path around the Sun that a spacecraft follows from one planet to another."
+  },
+  {
+    "term": "AU",
+    "meaning": "Astronomical Unit: the distance from Earth to the Sun (about 150 million km)."
+  },
+  {
+    "term": "RTG (nuclear battery)",
+    "meaning": "A power source that makes electricity from heat. Works even far from the Sun."
+  },
+  {
+    "term": "Orbit",
+    "meaning": "The path a spacecraft takes as it goes round and round a planet or moon."
+  },
+  {
+    "term": "Trip time",
+    "meaning": "How long the spacecraft travels from Earth to its target. It depends on distance, path and launch date."
+  },
+  {
+    "term": "Bus",
+    "meaning": "The main body of the spacecraft that holds everything."
+  },
+  {
+    "term": "Payload",
+    "meaning": "Everything the rocket carries. Here, our spacecraft."
+  },
+  {
+    "term": "Space debris",
+    "meaning": "Old rocket parts and broken satellites left in orbit around Earth. They move so fast that even a small piece can wreck a spacecraft."
+  },
+  {
+    "term": "Gravity assist",
+    "meaning": "Flying close past a planet so its gravity swings the spacecraft along faster. It is free speed, but it makes the journey longer."
+  },
+  {
+    "term": "Safe mode",
+    "meaning": "What a spacecraft does when it notices something wrong: it switches almost everything off and waits for instructions from Earth."
+  },
+  {
+    "term": "Planetary protection",
+    "meaning": "The rule that a spacecraft must not carry Earth germs to a world where life might exist, in case we mistake our own germs for aliens."
+  },
+  {
+    "term": "Solar radiation pressure",
+    "meaning": "The tiny push that sunlight gives to anything it lands on. Over months it can turn a spacecraft with big solar panels off course."
+  },
+  {
+    "term": "Deep Space Network",
+    "meaning": "The handful of giant radio dishes on Earth that talk to spacecraft far away. Every mission has to share them, so dish time is booked months ahead."
+  },
+  {
+    "term": "Why don't the stars move?",
+    "meaning": "The stars are so far away that crossing the whole solar system does not shift them by anything you could see. On the map only the Sun, the planets and your spacecraft move."
+  },
+  {
+    "term": "Why do the planets keep moving after I arrive?",
+    "meaning": "Your mission is over, but the solar system is not. The planets carry on round the Sun, and your spacecraft goes round the planet it reached, which is moving too. The little orbit drawn around the planet is much wider and much slower than a real one, or it would be far too small and too fast to see."
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "note": "The 3D view. spin is a display speed in radians a second, not the real day length (at mission speed Mars would spin five times a second). Distances and positions come from the real simulation. Planet and spacecraft sizes are made bigger so you can see them: at true size every planet would be smaller than one pixel.",
+  "sceneRadius": 10,
+  "starCount": 2600,
+  "starShell": 160,
+  "bodies": {
+    "sun": { "name": "Sun", "radius": 0.7, "texture": "sun", "color": "#ffd75e", "spin": 0.03 },
+    "earth": { "name": "Earth", "radius": 0.34, "texture": "earth", "color": "#4f8cff", "spin": 0.25 },
+    "earthCentral": { "name": "Earth", "radius": 1.5, "texture": "earth", "color": "#4f8cff", "spin": 0.25 },
+    "moon": { "name": "Moon", "radius": 0.42, "texture": "moon", "color": "#cfcfcf", "spin": 0.05 },
+    "mars": { "name": "Mars", "radius": 0.28, "texture": "mars", "color": "#e5744a", "spin": 0.22 },
+    "jupiter": { "name": "Jupiter", "radius": 0.75, "texture": "jupiter", "color": "#d8b98a", "spin": 0.35 }
+  },
+  "ship": { "unitsPerShipUnit": 0.012, "followDistance": 1.6, "glowSize": 0.55, "parkingOrbit": 1.9, "parkingOrbitSeconds": 6 },
+  "camera": { "fov": 45, "startHeight": 0.75, "startDistance": 1.75, "minDistance": 0.4, "maxDistance": 3.2, "autoSpinSpeed": 0.35 },
+  "lights": { "sun": 3.2, "ambient": 0.18 },
+  "text": {
+    "button": "🧊 3D view",
+    "buttonOff": "🗺️ Flat map",
+    "loading": "Loading the 3D view…",
+    "failed": "Your browser cannot show 3D here. The flat map still works.",
+    "overview": "🔭 Whole trip",
+    "follow": "🛰️ Follow spacecraft",
+    "spin": "🔄 Auto-spin",
+    "hint": "Drag to turn · scroll to zoom",
+    "scale": "Distances are real. Planets are drawn much bigger so you can see them.",
+    "you": "Your spacecraft"
+  }
+}

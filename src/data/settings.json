@@ -1,0 +1,13 @@
+{
+  "cruiseSeconds": 75,
+  "fuelMargin": 1.15,
+  "decisionSeconds": 20,
+  "burnHoldMs": 1200,
+  "insertionCountdownMs": 1500,
+  "effectMs": 2000,
+  "shakeMs": 300,
+  "clockJumpMs": 1500,
+  "beatMs": 2000,
+  "eventsPerMission": { "min": 3, "max": 5 },
+  "eventWindow": { "from": 0.15, "to": 0.85 }
+}

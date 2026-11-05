@@ -1,0 +1,651 @@
+[
+  {
+    "id": "solarStorm",
+    "name": "Solar storm",
+    "chance": 0.1,
+    "explain": "The Sun has thrown out a burst of charged particles. They can damage the electronics on board.",
+    "affectsPart": "body",
+    "whatIsIt": "A solar storm is a burst of charged particles from the Sun. It can flip bits in a computer or damage electronics.",
+    "realExample": "In 2003 a huge solar storm forced NASA's Mars Odyssey orbiter to switch off its radiation instrument for good.",
+    "howCommon": "Rare: a few big ones in each 11-year solar cycle",
+    "protectedBy": "backup",
+    "protectedText": "Your backup systems protected you.",
+    "failText": "The storm burned out the electronics. The spacecraft stopped answering.",
+    "options": [
+      {
+        "id": "safe",
+        "label": "Switch the instruments off until it passes",
+        "safe": true,
+        "effect": {
+          "sciencePenalty": 0.1
+        },
+        "protectedEffect": {
+          "none": true
+        }
+      },
+      {
+        "id": "risky",
+        "label": "Keep working",
+        "effect": {
+          "riskOfFailure": 0.25
+        },
+        "protectedEffect": {
+          "riskOfFailure": 0.05
+        }
+      }
+    ]
+  },
+  {
+    "id": "dust",
+    "name": "Dust on the solar panels",
+    "chance": 0.15,
+    "onlyIf": "dustRisk",
+    "explain": "A dust storm has coated the solar panels. They make less power now.",
+    "affectsPart": "power",
+    "whatIsIt": "Mars has dust storms that can cover the whole planet. Dust on solar panels blocks the sunlight, so they make less power.",
+    "realExample": "In 2018 a planet-wide dust storm covered the solar panels of NASA's Opportunity rover; it never woke up.",
+    "howCommon": "Common on Mars in dust-storm season",
+    "protectedBy": "rtg",
+    "protectedText": "Your nuclear battery does not need sunlight. No power was lost.",
+    "autoResolveWhenProtected": true,
+    "options": [
+      {
+        "id": "shake",
+        "label": "Shake the panels clean (burns 5 kg of fuel)",
+        "safe": true,
+        "effect": {
+          "fuelCost": 5
+        }
+      },
+      {
+        "id": "nothing",
+        "label": "Do nothing (power drops by 30%)",
+        "effect": {
+          "powerPenalty": 0.3
+        }
+      }
+    ]
+  },
+  {
+    "id": "courseDrift",
+    "name": "Course drift",
+    "chance": 0.12,
+    "explain": "Tracking shows the spacecraft is slowly drifting off its planned path.",
+    "affectsPart": "engine",
+    "whatIsIt": "No engine burn is perfect, and the Sun keeps tugging, so every spacecraft slowly drifts off its planned path. Tracking from Earth spots the drift early.",
+    "realExample": "New Horizons fired its thrusters several times to fine-tune its path on the nine-year flight to Pluto, arriving in July 2015.",
+    "howCommon": "Normal: almost every deep-space trip needs small corrections",
+    "failText": "The spacecraft was off course and flew past {target}.",
+    "options": [
+      {
+        "id": "correct",
+        "label": "Correction burn (burns 8 kg of fuel)",
+        "safe": true,
+        "effect": {
+          "fuelCost": 8
+        }
+      },
+      {
+        "id": "ignore",
+        "label": "Ignore it (3 in 10 chance of missing {target} on arrival)",
+        "effect": {
+          "riskAtInsertion": 0.3
+        }
+      }
+    ]
+  },
+  {
+    "id": "lostSignal",
+    "name": "Lost signal",
+    "chance": 0.08,
+    "explain": "Earth has stopped hearing the spacecraft. The antenna may be pointing the wrong way.",
+    "affectsPart": "antenna",
+    "whatIsIt": "The spacecraft talks to Earth with a radio dish. If the dish points the wrong way, or the Sun sits in between, the signal is lost.",
+    "realExample": "In October 2021 NASA stopped sending commands to all its Mars spacecraft for about two weeks, because the Sun sat between Earth and Mars and blocked the signal.",
+    "howCommon": "Occasional: a few times per mission",
+    "protectedBy": "antLarge",
+    "protectedText": "Your large dish antenna found Earth again.",
+    "options": [
+      {
+        "id": "switch",
+        "label": "Switch to the large dish antenna",
+        "onlyIf": "antLarge",
+        "safe": true,
+        "effect": {
+          "none": true
+        },
+        "protectedEffect": {
+          "none": true
+        }
+      },
+      {
+        "id": "wait",
+        "label": "Wait for Earth to call again",
+        "safe": true,
+        "effect": {
+          "sciencePenalty": 0.1,
+          "daysLost": 7
+        }
+      },
+      {
+        "id": "guess",
+        "label": "Point the antenna by guesswork (signal drops by 20% for the rest of the trip)",
+        "effect": {
+          "signalPenalty": 0.2
+        }
+      }
+    ]
+  },
+  {
+    "id": "instrumentFault",
+    "name": "Instrument fault",
+    "chance": 0.08,
+    "onlyIf": "hasInstruments",
+    "explain": "One of the science instruments has stopped working.",
+    "affectsPart": "instruments",
+    "whatIsIt": "Instruments are computers and sensors that must work for years in cold and radiation. Sometimes one just stops.",
+    "realExample": "In 2021 the main payload computer of the Hubble Space Telescope failed; it switched to backup hardware and kept working.",
+    "howCommon": "Occasional: most long missions lose one instrument",
+    "protectedBy": "threeInstruments",
+    "protectedText": "Backup instrument took over.",
+    "autoResolveWhenProtected": true,
+    "options": [
+      {
+        "id": "reboot",
+        "label": "Reboot it (1 kg of fuel to turn the spacecraft, science drops by 10%)",
+        "safe": true,
+        "effect": {
+          "fuelCost": 1,
+          "sciencePenalty": 0.1
+        }
+      },
+      {
+        "id": "accept",
+        "label": "Leave it off (science drops by 20%)",
+        "effect": {
+          "sciencePenalty": 0.2
+        }
+      }
+    ]
+  },
+  {
+    "id": "debris",
+    "name": "Debris warning",
+    "chance": 0.12,
+    "phase": "early",
+    "kind": "problem",
+    "explain": "Radar on Earth has spotted a piece of old space junk heading close to the spacecraft.",
+    "affectsPart": null,
+    "whatIsIt": "Earth is surrounded by old rocket parts and broken satellites. Ground radar tracks the big ones and warns a spacecraft when one is coming close.",
+    "realExample": "In November 2021 a satellite was blown up in a weapons test and the crew of the International Space Station had to shelter in their capsules while the cloud of pieces went past.",
+    "howCommon": "Common near Earth — the space station moves out of the way a few times every year",
+    "protectedBy": "large",
+    "protectedText": "The big bus took the hit on its shielding.",
+    "options": [
+      {
+        "id": "move",
+        "label": "Move out of the way (burns 12 kg of fuel)",
+        "safe": true,
+        "effect": {
+          "fuelCost": 12
+        }
+      },
+      {
+        "id": "wait",
+        "label": "Wait one day for better tracking (the warning is usually a false alarm)",
+        "safe": true,
+        "effect": {
+          "daysLost": 1,
+          "riskOfFailure": 0.05
+        }
+      },
+      {
+        "id": "hold",
+        "label": "Hold course",
+        "effect": {
+          "riskOfFailure": 0.15
+        },
+        "protectedEffect": {
+          "riskOfFailure": 0.04
+        }
+      }
+    ]
+  },
+  {
+    "id": "micrometeoroid",
+    "name": "Micrometeoroid strike",
+    "chance": 0.08,
+    "phase": "mid",
+    "kind": "problem",
+    "explain": "A grain of space dust has hit the spacecraft at enormous speed.",
+    "affectsPart": "instruments",
+    "whatIsIt": "Space is full of grains of dust moving faster than a bullet. One of them can chip a mirror or punch a hole in a panel.",
+    "realExample": "In May 2022 a dust grain bigger than anyone expected hit the James Webb Space Telescope and left permanent damage on one of its mirror segments.",
+    "howCommon": "Small hits are constant; a damaging one is rare",
+    "protectedBy": "threeInstruments",
+    "protectedText": "A spare instrument covered the damage.",
+    "options": [
+      {
+        "id": "turn",
+        "label": "Turn the instruments away from the dust stream",
+        "safe": true,
+        "effect": {
+          "sciencePenalty": 0.08,
+          "daysLost": 5
+        }
+      },
+      {
+        "id": "keep",
+        "label": "Keep collecting data",
+        "effect": {
+          "sciencePenalty": 0.05,
+          "riskOfFailure": 0.1
+        },
+        "protectedEffect": {
+          "riskOfFailure": 0.1
+        }
+      }
+    ]
+  },
+  {
+    "id": "sunPush",
+    "name": "Sunlight is pushing the spacecraft",
+    "chance": 0.1,
+    "phase": "mid",
+    "kind": "problem",
+    "onlyIf": "solar",
+    "explain": "Sunlight falling on the panels is slowly turning the spacecraft off its path.",
+    "affectsPart": "power",
+    "whatIsIt": "Light itself has a tiny push. Over months, sunlight falling on big solar panels slowly turns a spacecraft and nudges it off course.",
+    "realExample": "After two of its steering wheels broke, NASA's Kepler telescope was balanced against the push of sunlight on its solar panels, and in 2014 it started a whole second mission that way.",
+    "howCommon": "Always happening — every mission has to allow for it",
+    "failText": "The push of sunlight had turned the spacecraft just enough to miss {target}.",
+    "options": [
+      {
+        "id": "tilt",
+        "label": "Tilt the panels to balance the push (power drops 10%)",
+        "safe": true,
+        "effect": {
+          "powerPenalty": 0.1
+        }
+      },
+      {
+        "id": "thrusters",
+        "label": "Correct with the thrusters (burns 6 kg of fuel)",
+        "safe": true,
+        "effect": {
+          "fuelCost": 6
+        }
+      },
+      {
+        "id": "drift",
+        "label": "Let it drift",
+        "effect": {
+          "riskAtInsertion": 0.2
+        }
+      }
+    ]
+  },
+  {
+    "id": "planetaryProtection",
+    "name": "Planetary protection rule",
+    "chance": 0.07,
+    "phase": "late",
+    "kind": "problem",
+    "onlyIf": "mars",
+    "explain": "The planned path could hit {target}, and the rules say a spacecraft must not carry Earth germs there.",
+    "affectsPart": null,
+    "whatIsIt": "Mission rules say a spacecraft must not carry Earth germs to a world where life might exist. If the path could hit the planet, it has to be changed.",
+    "realExample": "In 2017 NASA deliberately flew Cassini into Saturn to burn it up, so it could never crash into Enceladus, a moon with an ocean under its ice.",
+    "howCommon": "Every mission to Mars or an icy moon has to follow this rule",
+    "failText": "Mission control took control of the spacecraft and pushed it away from {target}.",
+    "options": [
+      {
+        "id": "raise",
+        "label": "Raise the flyby path (burns 10 kg of fuel)",
+        "safe": true,
+        "effect": {
+          "fuelCost": 10
+        }
+      },
+      {
+        "id": "pointAway",
+        "label": "Point the instruments away and keep the path",
+        "safe": true,
+        "effect": {
+          "sciencePenalty": 0.15
+        }
+      },
+      {
+        "id": "ignore",
+        "label": "Ignore the rule",
+        "effect": {
+          "riskAtInsertion": 0.25
+        }
+      }
+    ]
+  },
+  {
+    "id": "gravityAssist",
+    "name": "Free push from a planet",
+    "chance": 0.2,
+    "phase": "early",
+    "kind": "opportunity",
+    "onlyIf": "outerPlanet",
+    "explain": "A planet is in the right place for a close flyby that would give the spacecraft a free push.",
+    "affectsPart": null,
+    "whatIsIt": "Flying close past a planet steals a little of the planet's speed and gives it to the spacecraft. It is free fuel, but the aim has to be near perfect and the longer path costs time.",
+    "realExample": "NASA's Juno swung past Earth in October 2013 to pick up speed, and reached Jupiter in July 2016.",
+    "howCommon": "Used by almost every mission to the outer planets",
+    "failText": "The flyby aim was off and the spacecraft never reached {target}.",
+    "options": [
+      {
+        "id": "take",
+        "label": "Take the flyby",
+        "effect": {
+          "fuelSaved": 60,
+          "daysLost": 30,
+          "riskAtInsertion": 0.1
+        }
+      },
+      {
+        "id": "direct",
+        "label": "Stay on the direct path",
+        "safe": true,
+        "effect": {
+          "none": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "bonusTarget",
+    "name": "An asteroid is passing close",
+    "chance": 0.12,
+    "phase": "mid",
+    "kind": "opportunity",
+    "onlyIf": "hasInstruments",
+    "explain": "A small asteroid will pass near the flight path. Turning to look at it is science nobody planned for.",
+    "affectsPart": "instruments",
+    "whatIsIt": "Sometimes a small world happens to sit near the flight path. Turning to look at it is extra science the mission never planned for.",
+    "realExample": "On its way to a comet, Europe's Rosetta spacecraft turned aside to photograph the asteroids Šteins in 2008 and Lutetia in 2010.",
+    "howCommon": "A lucky extra — a few missions get the chance",
+    "options": [
+      {
+        "id": "turn",
+        "label": "Turn and photograph it (burns 4 kg of fuel)",
+        "effect": {
+          "scienceBonus": 0.15,
+          "fuelCost": 4,
+          "daysLost": 3
+        }
+      },
+      {
+        "id": "stay",
+        "label": "Stay on plan",
+        "safe": true,
+        "effect": {
+          "none": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "safeMode",
+    "name": "The spacecraft switched itself off",
+    "chance": 0.1,
+    "phase": "any",
+    "kind": "problem",
+    "explain": "The spacecraft found something wrong, shut everything down and is waiting for instructions.",
+    "affectsPart": "body",
+    "whatIsIt": "When a spacecraft notices something wrong, it shuts down everything except the radio and waits for instructions. Engineers call this safe mode.",
+    "realExample": "In October 2016 NASA's Juno spacecraft put itself into safe mode just before a close pass of Jupiter, and the science from that pass was lost.",
+    "howCommon": "Occasional — most long missions do it at least once",
+    "protectedBy": "backup",
+    "protectedText": "Your backup systems found the fault and woke it safely.",
+    "options": [
+      {
+        "id": "checkout",
+        "label": "Run the full check-out before waking it",
+        "safe": true,
+        "effect": {
+          "sciencePenalty": 0.05,
+          "daysLost": 10
+        }
+      },
+      {
+        "id": "restart",
+        "label": "Restart it immediately",
+        "effect": {
+          "riskOfFailure": 0.12
+        },
+        "protectedEffect": {
+          "riskOfFailure": 0.03
+        }
+      }
+    ]
+  },
+  {
+    "id": "groundStationBusy",
+    "name": "No dish free on Earth",
+    "chance": 0.09,
+    "phase": "any",
+    "kind": "problem",
+    "explain": "Every big dish on Earth is listening to another mission, so there is no way to send the data home right now.",
+    "affectsPart": "antenna",
+    "whatIsIt": "Only a handful of giant dishes on Earth can hear a spacecraft in deep space, and every mission has to share them.",
+    "realExample": "Only one dish on Earth can send commands to Voyager 2 — a 70-metre antenna near Canberra — and when it went offline for repairs for eleven months in 2020 the spacecraft could not be told anything.",
+    "howCommon": "Constant — dish time is booked months ahead",
+    "protectedBy": "antLarge",
+    "protectedText": "Your large dish antenna got the data home faster than expected.",
+    "failText": "The memory filled up and the computer crashed. The spacecraft was lost.",
+    "options": [
+      {
+        "id": "wait",
+        "label": "Wait your turn for a dish",
+        "safe": true,
+        "effect": {
+          "daysLost": 6
+        }
+      },
+      {
+        "id": "slow",
+        "label": "Send the data slowly on the small dish",
+        "safe": true,
+        "effect": {
+          "sciencePenalty": 0.12
+        },
+        "protectedEffect": {
+          "sciencePenalty": 0.04
+        }
+      },
+      {
+        "id": "store",
+        "label": "Store everything on board and send it later",
+        "effect": {
+          "riskOfFailure": 0.08
+        }
+      }
+    ]
+  },
+  {
+    "id": "softwareBug",
+    "name": "A bug in the flight software",
+    "chance": 0.09,
+    "phase": "mid",
+    "kind": "problem",
+    "explain": "The computer keeps restarting itself. Engineers on Earth have found a mistake in its program.",
+    "affectsPart": "body",
+    "whatIsIt": "A spacecraft is run by a computer, and its program can have mistakes that only show up in space. Engineers can send a new program across millions of kilometres to fix it.",
+    "realExample": "Days after landing on Mars in 1997, NASA's Pathfinder kept resetting itself, until engineers on Earth found the bug and sent up new software that fixed it.",
+    "howCommon": "Common — almost every mission updates its software in flight",
+    "options": [
+      {
+        "id": "upload",
+        "label": "Upload the fix and test it carefully",
+        "safe": true,
+        "effect": {
+          "daysLost": 8
+        }
+      },
+      {
+        "id": "live",
+        "label": "Patch it live",
+        "effect": {
+          "riskOfFailure": 0.1
+        }
+      },
+      {
+        "id": "around",
+        "label": "Work around it",
+        "safe": true,
+        "effect": {
+          "sciencePenalty": 0.1
+        }
+      }
+    ]
+  },
+  {
+    "id": "radiationBelt",
+    "name": "Jupiter's radiation",
+    "chance": 0.14,
+    "phase": "late",
+    "kind": "problem",
+    "onlyIf": "jupiter",
+    "explain": "The spacecraft is entering belts of charged particles strong enough to destroy its electronics.",
+    "affectsPart": "body",
+    "whatIsIt": "Jupiter is wrapped in belts of charged particles trapped by its magnetic field. They are strong enough to destroy ordinary electronics in weeks.",
+    "realExample": "NASA's Juno carries its computer inside a titanium vault about a centimetre thick, built only to keep Jupiter's radiation out.",
+    "howCommon": "Certain at Jupiter — the question is only how much",
+    "protectedBy": "large",
+    "protectedText": "The big bus shielded the computer.",
+    "failText": "The radiation destroyed the computer. The spacecraft stopped answering.",
+    "options": [
+      {
+        "id": "shorten",
+        "label": "Shorten the time in the belts (burns 15 kg of fuel)",
+        "safe": true,
+        "effect": {
+          "fuelCost": 15
+        }
+      },
+      {
+        "id": "shield",
+        "label": "Shield the computer by shutting instruments down",
+        "safe": true,
+        "effect": {
+          "sciencePenalty": 0.18
+        }
+      },
+      {
+        "id": "through",
+        "label": "Fly straight through",
+        "effect": {
+          "riskOfFailure": 0.2
+        },
+        "protectedEffect": {
+          "riskOfFailure": 0.06
+        }
+      }
+    ]
+  },
+  {
+    "id": "debrisDamage",
+    "name": "Damage found",
+    "chance": 0,
+    "kind": "problem",
+    "follows": {
+      "eventId": "debris",
+      "optionId": "hold"
+    },
+    "explain": "A panel is making less power than it should. A piece of debris hit it after all.",
+    "affectsPart": "power",
+    "whatIsIt": "A strike is often noticed only much later, when a panel stops making the power the plan expected.",
+    "realExample": "Small strikes are usually only found later, when engineers see that a panel is making less power than it should.",
+    "howCommon": "Only after a close pass that was not avoided",
+    "options": [
+      {
+        "id": "less",
+        "label": "Work with less power",
+        "safe": true,
+        "effect": {
+          "powerPenalty": 0.15
+        }
+      },
+      {
+        "id": "spin",
+        "label": "Spin the spacecraft to face the Sun better (burns 5 kg of fuel)",
+        "safe": true,
+        "effect": {
+          "fuelCost": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "assistCheck",
+    "name": "Aim check after the flyby",
+    "chance": 0,
+    "kind": "problem",
+    "follows": {
+      "eventId": "gravityAssist",
+      "optionId": "take"
+    },
+    "explain": "Tracking shows the flyby changed the path slightly more than planned.",
+    "affectsPart": "engine",
+    "whatIsIt": "A planet never gives exactly the push the plan expected, so the new path has to be measured and tidied up.",
+    "realExample": "After every gravity assist, mission control tracks the spacecraft for weeks to measure exactly what the planet did to its path.",
+    "howCommon": "After every gravity assist",
+    "options": [
+      {
+        "id": "burn",
+        "label": "Clean-up burn (burns 7 kg of fuel)",
+        "safe": true,
+        "effect": {
+          "clearInsertionRisk": true,
+          "fuelCost": 7
+        }
+      },
+      {
+        "id": "closeEnough",
+        "label": "The aim looks close enough",
+        "effect": {
+          "none": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "extraData",
+    "name": "The new instrument is working well",
+    "chance": 0,
+    "kind": "opportunity",
+    "follows": {
+      "eventId": "bonusTarget",
+      "optionId": "turn"
+    },
+    "explain": "The asteroid pictures came out better than anyone hoped, and there is more to send.",
+    "affectsPart": "instruments",
+    "whatIsIt": "Data taken by chance on the way to a target is still real science, if there is time to send it home.",
+    "realExample": "Data taken on the way to a target has often turned into science papers of its own.",
+    "howCommon": "Only when an extra target was photographed",
+    "options": [
+      {
+        "id": "send",
+        "label": "Send it all home",
+        "effect": {
+          "scienceBonus": 0.1,
+          "daysLost": 4
+        }
+      },
+      {
+        "id": "keep",
+        "label": "Keep to the schedule",
+        "safe": true,
+        "effect": {
+          "none": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+[
+  { "id": "chandrayaan2", "name": "Chandrayaan-2 Orbiter", "agency": "ISRO", "year": 2019, "power": "solar", "rocket": "medium", "fact": "India's orbiter is still mapping the Moon years after launch. It reached the Moon on a slow, fuel-saving route." },
+  { "id": "lro", "name": "Lunar Reconnaissance Orbiter", "agency": "NASA", "year": 2009, "power": "solar", "rocket": "medium", "fact": "LRO has photographed every Apollo landing site from orbit." },
+  { "id": "mangalyaan", "name": "Mangalyaan (MOM)", "agency": "ISRO", "year": 2013, "power": "solar", "rocket": "light", "fact": "Launched November 2013 on a PSLV, reached Mars orbit in September 2014 on a famously small budget." },
+  { "id": "maven", "name": "MAVEN", "agency": "NASA", "year": 2013, "power": "solar", "rocket": "medium", "fact": "Reached Mars orbit on 21 September 2014, three days before Mangalyaan." },
+  { "id": "juno", "name": "Juno", "agency": "NASA", "year": 2011, "power": "solar", "rocket": "heavy", "fact": "Launched August 2011, reached Jupiter July 2016. Uses three giant solar panels because sunlight at Jupiter is so weak." }
+]

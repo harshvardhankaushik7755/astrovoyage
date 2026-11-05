@@ -1,0 +1,54 @@
+{
+  "_note": "Every sentence the Flight Director can say. {placeholders} are filled in by src/ai/flightDirector.ts, which decides WHICH line to use; the words themselves all live here.",
+  "why": {
+    "insertionFuel": "You reached {target} but could not slow down into orbit: the tank ran dry at the braking burn.",
+    "powerLow": "At {target} your {power} {make} {powerMade} W, but the instruments need {powerNeeded} W, so not everything could run.",
+    "weakAntenna": "Only {dataPct}% of the science data reached Earth, because the {antenna} is too weak for this distance.",
+    "weakAntennaNoBigger": "Only {dataPct}% of the science data reached Earth: your instruments make more data than even the {antenna} can send from {target}.",
+    "stormNoBackup": "A solar storm burned out the electronics: the spacecraft kept working through it with no backup systems.",
+    "dustIgnored": "Dust settled on the solar panels and you let it stay, so the spacecraft flew on with less power.",
+    "driftIgnored": "You ignored the course drift and got lucky: the spacecraft still found {target}.",
+    "driftIgnoredLost": "You ignored the course drift and the spacecraft missed {target}.",
+    "overCarriedFuel": "You reached {target} with far more fuel than needed: the tank could give {dvAvailable} km/s and the trip needed {dvNeeded} km/s.",
+    "overSizedPanels": "You reached {target}, but your {power} make {panelOutput} W when {powerNeeded} W would do.",
+    "perfect": "A perfect flight: you reached {target}, went into orbit and brought home all the science.",
+    "perfectSomeDataLost": "A perfect flight: you reached {target}, went into orbit and sent home everything the antenna could manage from that far away ({dataPct}% of the data).",
+    "overBudget": "This design costs ${costM}M but the budget is ${budgetM}M, so it never left the launch pad.",
+    "lost": "The spacecraft was lost on the way to {target}: {reason}",
+    "good": "You reached {target} and collected {science} of {scienceMax} science points.",
+    "goodOverPlan": "You reached {target} and collected {science} science points — {extra} more than the {scienceMax} you planned for."
+  },
+  "tips": {
+    "insertionFuel": "Carry a fuel reserve: a correction burn or a dust shake can eat a small margin.",
+    "powerLow": "Far from the Sun, choose bigger panels or a nuclear battery, and shake dust off when you can.",
+    "weakAntenna": "The large dish antenna sends ten times more data home.",
+    "weakAntennaNoBigger": "Fewer instruments, or ones that make less data, get more of the science home from that far away.",
+    "stormNoBackup": "In a storm, switch the instruments off, or fly a large bus with backup systems.",
+    "dustIgnored": "Shaking the panels costs a little fuel but keeps every instrument running.",
+    "driftIgnored": "A small correction burn early is far cheaper than missing the planet.",
+    "overCarriedFuel": "Less fuel means less mass, a smaller rocket and money saved for science.",
+    "overSizedPanels": "Small panels would have done the job here and saved mass and money.",
+    "perfect": "Try a harder mission, or the fast route with the same design.",
+    "overBudget": "A lighter rocket, fewer instruments or less fuel brings the cost down.",
+    "lost": "Check the decisions below to see where it went wrong.",
+    "good": "Look at the decisions below to see where the missing points went.",
+    "goodFullScience": "You brought home every science point there was. Try a harder mission, or the fast route with the same design."
+  },
+  "decisions": {
+    "chanceThatCaused": "Taking the chance on day {causeDay} paid off and brought {event} on day {eventDay}.",
+    "cause": "{event} on day {eventDay} came from your choice on day {causeDay}: {option}.",
+    "chance": "You took the chance on day {day} and it paid off: {option}.",
+    "everySafe": "Every choice was the safe one. The science you lost on day {day} ({option}) was the price of safety.",
+    "everyGood": "Every choice you made on the way was a good one. On day {day} you chose: {option}.",
+    "best": "Your best choice was on day {day}: {option}.",
+    "riskiest": "Your riskiest choice was on day {day}: {option}."
+  },
+  "realMission": "{name} ({agency}, {year}) did this for real: {fact}",
+  "compare": {
+    "rtg": "a nuclear battery",
+    "solar": "solar panels",
+    "sameRocket": " Like {mission}, you also flew on a {rocket} rocket.",
+    "samePower": "You used {power} at {target}, like {mission}.{alsoRocket}",
+    "differentPower": "{mission} used {theirPower}, but you chose {yourPower}.{alsoRocket}"
+  }
+}

@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Local environment. Never commit a real key — .env.example is the template to copy.
+.env
+.env.*
+!.env.example
+
+# Test and tooling output
+coverage/
+playwright-report/
+test-results/
+.vite/
+*.log
+npm-debug.log*
+
+# Screenshots written by `npm run measure`, at the repo root only.
+# The ones in docs/screenshots are part of the submission pack and ARE committed, so this rule
+# is anchored with a leading slash: a bare `screenshots` would match docs/screenshots too.
+/screenshots/
+
+# One-off probe scripts live as scripts/.name.mjs so they never ship
+scripts/.*
+
+# Review bundles and archives
+*.tgz
+*.zip
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

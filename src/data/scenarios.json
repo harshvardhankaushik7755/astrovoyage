@@ -1,0 +1,35 @@
+[
+  {
+    "id": "moon", "name": "Moon Orbiter", "level": "Easy (tutorial)",
+    "goal": "Map the Moon from orbit", "budget": 250,
+    "deltaV": 4.0, "distanceAU": 1.0, "commsFactor": 1.0,
+    "tripDays": 3, "windowMonths": 0, "windowOffset": 0,
+    "missionMonths": 6, "dustRisk": 0,
+    "target": "Moon", "targetProse": "the Moon", "color": "#cfcfcf", "centralBody": "earth", "targetOrbitRadiusAU": 0.00257, "targetOrbitDays": 27.3, "insertionDeltaV": 0.8,
+    "preset": { "bodyId": "small", "instrumentIds": ["camera", "magnetometer"], "powerId": "solarSmall", "antennaId": "antSmall", "engineId": "chemical", "rocketId": "medium", "fuelKg": 1400, "launchMonth": 3, "route": "slow" },
+    "description": "Learn the basics. The Moon is close, sunlight is strong and you can launch any month.",
+    "realMissionIds": ["chandrayaan2", "lro"]
+  },
+  {
+    "id": "mars", "name": "Mars on a Budget", "level": "Medium",
+    "goal": "Reach Mars orbit and send back photos", "budget": 150,
+    "deltaV": 5.7, "distanceAU": 1.52, "commsFactor": 0.1,
+    "tripDays": 240, "windowMonths": 26, "windowOffset": 10,
+    "missionMonths": 12, "dustRisk": 0.15,
+    "target": "Mars", "targetProse": "Mars", "color": "#e5744a", "centralBody": "sun", "targetOrbitRadiusAU": 1.52, "targetOrbitDays": 687, "insertionDeltaV": 1.0,
+    "preset": { "bodyId": "small", "instrumentIds": ["camera"], "powerId": "solarSmall", "antennaId": "antLarge", "engineId": "chemical", "rocketId": "light", "fuelKg": 1800, "launchMonth": 10, "route": "slow" },
+    "description": "A very small budget, like ISRO's Mangalyaan. Mars is only reachable once every 26 months.",
+    "realMissionIds": ["mangalyaan", "maven"]
+  },
+  {
+    "id": "jupiter", "name": "Jupiter Explorer", "level": "Hard",
+    "goal": "Study Jupiter's clouds and magnetic field", "budget": 900,
+    "deltaV": 7.0, "distanceAU": 5.2, "commsFactor": 0.05,
+    "tripDays": 1900, "windowMonths": 13, "windowOffset": 4,
+    "missionMonths": 12, "dustRisk": 0,
+    "target": "Jupiter", "targetProse": "Jupiter", "color": "#d9a066", "centralBody": "sun", "targetOrbitRadiusAU": 5.2, "targetOrbitDays": 4333, "insertionDeltaV": 0.54,
+    "preset": { "bodyId": "small", "instrumentIds": ["camera", "magnetometer"], "powerId": "solarLarge", "antennaId": "antLarge", "engineId": "chemical", "rocketId": "medium", "fuelKg": 3500, "launchMonth": 4, "route": "slow" },
+    "description": "Sunlight at Jupiter is only 3.7% of Earth's. The trip takes about 5 years.",
+    "realMissionIds": ["juno"]
+  }
+]

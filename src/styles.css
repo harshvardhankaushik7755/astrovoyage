@@ -1,0 +1,924 @@
+:root {
+  --bg: #0b1020; --panel: #141b33; --panel2: #1c2547; --text: #e8ecf8; --muted: #9aa6c9;
+  --accent: #4f8cff; --ok: #3ccf7a; --bad: #ff5c6c; --warn: #ffb648; --border: #2a3560;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: radial-gradient(circle at 20% 0%, #182052, var(--bg) 60%); color: var(--text); min-height: 100vh; }
+.app { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+h1, h2, h3, h4 { margin: 0 0 12px; }
+h4 { margin-top: 20px; color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: .06em; }
+.title { font-size: 48px; margin-top: 80px; }
+.lead { font-size: 18px; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.center { text-align: center; max-width: 720px; margin: 0 auto; }
+.row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.between { justify-content: space-between; }
+
+button { background: var(--panel2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; cursor: pointer; font-size: 14px; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); font-weight: 600; }
+button.big { padding: 14px 26px; font-size: 16px; margin: 16px 0; }
+button:disabled { opacity: .4; cursor: not-allowed; }
+button.link { background: none; border: none; color: var(--accent); padding: 0; text-decoration: underline; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; }
+.card .tag { display: inline-block; background: var(--panel2); border-radius: 999px; padding: 2px 10px; font-size: 12px; color: var(--muted); margin-bottom: 8px; align-self: flex-start; }
+.card button { margin-top: auto; }
+.facts { padding-left: 18px; color: var(--muted); }
+
+.bars { position: sticky; top: 0; background: var(--bg); padding: 12px 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; z-index: 5; }
+.bar { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; }
+.bar-head { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+.bar-track { height: 8px; background: #0a0f24; border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--ok); transition: width .2s; }
+.bar.bad .bar-fill { background: var(--bad); }
+.bar.bad { border-color: var(--bad); }
+
+.lab { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
+.parts section { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px 16px; margin-bottom: 14px; }
+.parts section h4 { margin-top: 4px; }
+.item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; }
+.item:hover { background: var(--panel2); }
+.item.on { background: var(--panel2); border-color: var(--accent); }
+.item input { margin-top: 4px; }
+input[type=range] { width: 100%; }
+
+.summary { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; position: sticky; top: 96px; }
+.summary.left { text-align: left; margin: 20px 0; position: static; }
+.ok-box { background: rgba(60,207,122,.15); border: 1px solid var(--ok); border-radius: 8px; padding: 10px; }
+.problems { padding-left: 18px; color: var(--bad); }
+.problems li { margin-bottom: 6px; }
+
+.calendar { display: grid; grid-template-columns: repeat(12, 1fr); gap: 6px; }
+.month { padding: 6px 2px; font-size: 12px; line-height: 1.2; }
+.month.green { background: rgba(60,207,122,.2); border-color: var(--ok); }
+.month.picked { outline: 2px solid var(--accent); }
+.window-msg { padding: 8px 12px; border-radius: 8px; background: var(--panel); border: 1px solid var(--border); }
+.window-msg.open, .window-msg.any { border-color: var(--ok); }
+.window-msg.near { border-color: var(--warn); }
+.window-msg.closed { border-color: var(--bad); }
+.checks { list-style: none; padding: 0; }
+.checks li { padding: 6px 0; }
+.checks .fail { color: var(--bad); }
+.stars { font-size: 36px; margin: 8px 0; }
+
+@media (max-width: 800px) {
+  .lab { grid-template-columns: 1fr; }
+  .summary { position: static; }
+  .bars { grid-template-columns: repeat(2, 1fr); }
+  .calendar { grid-template-columns: repeat(6, 1fr); }
+  .title { font-size: 36px; margin-top: 40px; }
+}
+
+/* ---- Mission Control ---- */
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.topbar h2 { margin: 0; }
+.clock { font-variant-numeric: tabular-nums; }
+.speed { gap: 6px; }
+.speed button.on { background: var(--accent); border-color: var(--accent); font-weight: 600; }
+.status { padding: 10px 14px; border-radius: 10px; background: var(--panel); border: 1px solid var(--border); margin-bottom: 14px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.status.ok { border-color: var(--ok); color: var(--ok); }
+.status.bad { border-color: var(--bad); color: var(--bad); }
+.status.burn { border-color: var(--warn); color: var(--warn); }
+.mission { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
+.map { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 8px; }
+.map svg { width: 100%; height: auto; display: block; }
+.map .orbit { fill: none; stroke: var(--border); stroke-dasharray: 4 6; }
+.map .trail { fill: none; stroke: var(--accent); stroke-opacity: .45; stroke-width: 1.5; }
+.map .label { fill: var(--muted); font-size: 11px; }
+/* The spacecraft the player built (Stage 12): one colour per kind of part, so the machine reads as a
+   machine at sprite size. Each part keeps its own fill; the plain white is only a fallback. */
+.map .ship { fill: #fff; }
+.map .ship .s-bus { fill: #e9eeff; }
+.map .ship .s-panel { fill: #3c60c4; }
+.map .ship .s-join { stroke: #8fabf5; stroke-width: .5; }
+.map .ship .s-rtg { fill: #c6a86a; }
+.map .ship .s-fin { stroke: #8d7746; stroke-width: .7; }
+.map .ship .s-mast { fill: #c9d3f5; }
+.map .ship .s-dish { fill: #f4f7ff; }
+.map .ship .s-sensor { fill: #ffd166; }
+.map .ship .s-nozzle { fill: #c3c9de; }
+.map .ship .s-grid { fill: #6d79a0; }
+.map .ship .s-grid-line { stroke: #cdd6f6; stroke-width: .5; }
+.map .glow { fill: var(--warn); animation: burn .3s ease-in-out infinite alternate; }
+/* the burn: the engine end glows, not the whole spacecraft, so you can still see what you built */
+.map .sprite.burning .s-nozzle, .map .sprite.burning .s-grid { fill: var(--warn); animation: burn .3s ease-in-out infinite alternate; }
+@keyframes burn { from { opacity: .25; } to { opacity: 1; } }
+.gauges { display: flex; flex-direction: column; gap: 10px; }
+.gauge .bar-fill { transition: width .8s ease-out; }
+.gauge .sub { color: var(--muted); font-size: 11px; margin-top: 4px; }
+.log { margin-top: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; max-height: 200px; overflow: auto; }
+.log h4 { margin-top: 0; }
+.log ul { list-style: none; padding: 0; margin: 0; }
+.log li { padding: 5px 0; border-bottom: 1px solid var(--border); }
+.log li:first-child { font-weight: 600; }
+.log li b { color: var(--muted); font-weight: 500; margin-right: 10px; font-variant-numeric: tabular-nums; }
+@media (max-width: 800px) { .mission { grid-template-columns: 1fr; } }
+
+/* ---- Challenges ---- */
+.status.warn { border-color: var(--warn); color: var(--warn); }
+.overlay { position: fixed; inset: 0; background: rgba(5, 8, 20, .3); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+.modal { background: var(--panel); border: 1px solid var(--warn); border-radius: 16px; padding: 22px 24px; max-width: 540px; width: 100%; box-shadow: 0 20px 60px rgba(0, 0, 0, .5); }
+.modal h3 { margin: 12px 0 8px; font-size: 22px; }
+.modal .tag { display: inline-block; background: var(--panel2); border-radius: 999px; padding: 2px 10px; font-size: 12px; color: var(--muted); }
+.countdown { color: var(--warn); font-weight: 600; font-variant-numeric: tabular-nums; }
+.options { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 8px; }
+.options .option { text-align: left; padding: 14px 16px; font-size: 15px; line-height: 1.3; }
+.options .option:hover { border-color: var(--warn); }
+.options .warn { display: block; color: var(--warn); font-size: 12px; margin-top: 4px; }
+.decisions { padding-left: 18px; }
+.decisions li { margin-bottom: 10px; }
+
+/* ---- Results ---- */
+.result h2 { margin-top: 40px; }
+.stars-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 10px 0 14px; }
+.star { background: var(--panel); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; font-size: 14px; }
+.star.on { border-color: var(--ok); }
+.star.off { color: var(--muted); }
+.director { display: flex; gap: 14px; align-items: flex-start; text-align: left; margin: 22px 0; }
+.avatar { width: 64px; height: 64px; flex: none; }
+.bubble { position: relative; flex: 1; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; }
+.bubble::before { content: ""; position: absolute; left: -8px; top: 22px; border: 8px solid transparent; border-right-color: var(--border); border-left: 0; }
+.bubble-head { font-weight: 600; margin-bottom: 6px; }
+.bubble p { margin: 0; line-height: 1.5; }
+.decisions { padding-left: 0; list-style: none; }
+.decisions li { margin-bottom: 10px; padding-left: 30px; position: relative; }
+.decisions .verdict { position: absolute; left: 0; top: 0; }
+.real { padding: 10px 0; border-top: 1px solid var(--border); }
+.real:first-of-type { border-top: 0; }
+.real p { margin: 6px 0 0; }
+.real .compare { color: var(--ok); }
+
+/* ---- Polish: keyboard focus, help, home, sound, small screens ---- */
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--warn); outline-offset: 2px; }
+.item:focus-within { outline: 2px solid var(--accent); outline-offset: 1px; }
+.help { border-radius: 999px; width: 36px; height: 36px; padding: 0; font-weight: 700; font-size: 18px; }
+.glossary dl { margin: 12px 0 0; }
+.glossary dt { font-weight: 700; margin-top: 12px; }
+.glossary dd { margin: 2px 0 0; color: var(--muted); line-height: 1.45; }
+.howto { list-style: none; padding: 0; margin: 20px auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: left; }
+.howto li { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: grid; gap: 4px; }
+.howto .step { width: 28px; height: 28px; border-radius: 999px; background: var(--accent); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
+.howto span:last-child { color: var(--muted); font-size: 14px; }
+.center-row { justify-content: center; }
+.mute { font-size: 13px; }
+svg, img { max-width: 100%; }
+.bar-head { gap: 8px; }
+@media (max-width: 800px) { .howto { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  .title { font-size: 30px; margin-top: 24px; }
+  .lead { font-size: 16px; }
+  button.big { width: 100%; margin: 8px 0; }
+  .bars { gap: 8px; }
+  .bar-head { font-size: 11px; }
+  .calendar { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ---- Review fixes: contrast, dialogs, calendar, reduced motion ---- */
+button.primary, .speed button.on { color: var(--bg); }
+.howto .step { color: var(--bg); }
+.modal { max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; }
+.month.picked { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
+button.month:focus-visible { outline: 3px solid var(--warn); outline-offset: 1px; }
+@media (max-width: 800px) { .lab .summary { order: -1; } }
+@media (prefers-reduced-motion: reduce) {
+  .map .glow, .map .sprite.burning .s-nozzle, .map .sprite.burning .s-grid { animation: none; }
+  .bar-fill, .gauge .bar-fill { transition: none; }
+}
+
+/* ---- Cause and effect (Stage 7): map effects ---- */
+.fx .fx-tint { fill: #ff9a3c; opacity: .08; pointer-events: none; }
+.fx .fx-particle { fill: #ffb648; animation: fx-fly 2s ease-out infinite; }
+.fx .fx-spark { fill: #fff2a8; animation: fx-fly .6s ease-out forwards; }
+.fx .fx-puff { fill: #c9a27a; animation: fx-fly .8s ease-out forwards; }
+.fx .fx-pulse { fill: #fff; animation: fx-fly .8s linear forwards; }
+@keyframes fx-fly { from { transform: translate(0, 0); opacity: 1; } to { transform: translate(var(--dx), var(--dy)); opacity: 0; } }
+.fx .fx-haze { fill: #a06b3a; opacity: .35; animation: fx-haze 3s ease-in-out infinite alternate; }
+@keyframes fx-haze { from { transform: translate(-2px, -1px); opacity: .25; } to { transform: translate(2px, 1px); opacity: .45; } }
+.fx .fx-miss { stroke: var(--bad); stroke-width: 1.5; stroke-dasharray: 3 4; }
+.fx .lasting .fx-miss { opacity: .6; }
+.fx .fx-target-warn { fill: none; stroke: var(--bad); stroke-width: 2; stroke-dasharray: 4 3; animation: fx-warn 1s ease-in-out infinite alternate; }
+@keyframes fx-warn { from { opacity: .4; } to { opacity: 1; } }
+.fx .fx-signal { stroke: var(--accent); stroke-width: 1; opacity: .8; }
+.fx .fx-signal.broken { stroke-dasharray: 6 5; animation: fx-flicker .35s steps(2) infinite; }
+.fx .fx-signal.dim { stroke-dasharray: 2 4; opacity: .3; }
+@keyframes fx-flicker { from { opacity: .9; } to { opacity: .15; } }
+.fx .fx-badge { fill: var(--bad); font-size: 14px; font-weight: 700; }
+.fx .fx-shield { fill: none; stroke: var(--accent); stroke-width: 2; animation: fx-ring .8s ease-out forwards; }
+.fx .fx-shield.ok { stroke: var(--ok); }
+.fx .fx-orbit-ring { fill: none; stroke: var(--ok); stroke-width: 2; animation: fx-ring 1.4s ease-out forwards; }
+@keyframes fx-ring { from { r: 8; opacity: .9; } to { r: 42; opacity: 0; } }
+/* the path the spacecraft rides round the planet: faint, so the planet stays the brighter thing */
+.fx .parking-orbit { fill: none; stroke: var(--ok); stroke-opacity: .45; stroke-width: 1; stroke-dasharray: 3 3; }
+.fx .orbiting { animation: fx-spin 6s linear infinite; }
+@keyframes fx-spin { to { transform: rotate(360deg); } }
+.fx .flame { fill: var(--warn); animation: fx-flame .12s ease-in-out infinite alternate; }
+@keyframes fx-flame { from { opacity: .6; transform: scaleX(.8); } to { opacity: 1; transform: scaleX(1.1); } }
+.fx .sprite.flicker { animation: fx-flicker .12s steps(2) 5; }
+.fx .sprite.offline { animation: fx-offline 1.2s ease-in-out; }
+@keyframes fx-offline { 0%, 100% { opacity: 1; } 30%, 70% { opacity: .35; } }
+.fx .sprite.wiggle { animation: fx-wiggle .6s ease-in-out; }
+@keyframes fx-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(9deg); } 50% { transform: rotate(-9deg); } 75% { transform: rotate(6deg); } }
+.fx .sprite.dark .ship * { fill: #3a3f55; stroke: #3a3f55; }
+.fx .sprite.flypast { animation: fx-flypast 2.2s ease-in forwards; }
+@keyframes fx-flypast { to { transform: translate(320px, 0); opacity: 0; } }
+.fx .fx-marker circle { fill: none; stroke: var(--muted); stroke-dasharray: 2 2; }
+.fx .fx-marker text { fill: var(--muted); font-size: 9px; }
+.fx .fx-count { fill: #fff; font-size: 48px; font-weight: 700; text-anchor: middle; opacity: .85; transform-box: fill-box; transform-origin: center; animation: fx-pop .5s ease-out; }
+@keyframes fx-pop { from { transform: scale(1.6); opacity: 0; } to { transform: scale(1); opacity: .85; } }
+.map.shake { animation: fx-shake .3s linear; }
+@keyframes fx-shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-4px, 2px); } 40% { transform: translate(4px, -2px); } 60% { transform: translate(-3px, -1px); } 80% { transform: translate(3px, 1px); } }
+.map.storm { box-shadow: inset 0 0 0 2px rgba(255, 154, 60, .35); }
+
+/* ---- Cause and effect: gauges, clock, log ---- */
+.gauge { position: relative; }
+.gauge .delta, .clock .delta { position: absolute; right: 10px; top: -6px; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--panel2); animation: fx-float 1.6s ease-out forwards; pointer-events: none; }
+.clock { position: relative; }
+.clock .delta { right: -8px; top: -20px; }
+.delta.loss { color: var(--bad); border: 1px solid var(--bad); }
+.delta.gain { color: var(--ok); border: 1px solid var(--ok); }
+.delta.risk { color: var(--warn); border: 1px solid var(--warn); }
+@keyframes fx-float { 0% { opacity: 0; transform: translateY(6px); } 15% { opacity: 1; transform: translateY(0); } 70% { opacity: 1; } 100% { opacity: 0; transform: translateY(-10px); } }
+.gauge.dimmed::after { content: ""; position: absolute; inset: 0; border-radius: 10px; background: rgba(120, 80, 40, .35); pointer-events: none; }
+.gauge.pulse .bar-fill { background: var(--muted); animation: fx-pulse-grey 1s ease-in-out infinite alternate; }
+@keyframes fx-pulse-grey { from { opacity: .35; } to { opacity: .9; } }
+.marks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.mark { font-size: 11px; color: var(--muted); background: var(--panel2); border: 1px solid var(--border); border-radius: 999px; padding: 1px 8px; cursor: help; }
+.mark:focus-visible { outline: 2px solid var(--warn); }
+.instruments { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.instr { position: relative; font-size: 11px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--border); background: var(--panel2); transition: opacity .4s, border-color .4s; }
+.instr.off { opacity: .35; }
+.instr.dead { opacity: .35; text-decoration: line-through; }
+.instr.fault { border-color: var(--bad); color: var(--bad); }
+.instr.backup { border-color: var(--ok); color: var(--ok); animation: fx-swap .8s ease-in-out; }
+@keyframes fx-swap { 0% { transform: rotateX(0); } 50% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
+.instr .badge { position: absolute; top: -7px; right: -4px; background: var(--bad); color: #fff; font-size: 9px; width: 13px; height: 13px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; }
+.clock.jump { animation: fx-clock 1.5s ease-in-out; }
+@keyframes fx-clock { 0%, 100% { color: inherit; } 20%, 60% { color: var(--warn); } }
+.status .chip { display: inline-block; border: 1px solid var(--warn); color: var(--warn); border-radius: 999px; padding: 2px 10px; font-size: 12px; }
+.log li.good { color: var(--ok); }
+.chips { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-left: 8px; }
+.chips .chip { font-size: 11px; border: 1px solid var(--border); background: var(--panel2); border-radius: 999px; padding: 1px 8px; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) {
+  .fx .fx-particle, .fx .fx-spark, .fx .fx-puff, .fx .fx-pulse, .fx .fx-haze { display: none; }
+  .fx .fx-shield, .fx .fx-orbit-ring, .fx .orbiting, .fx .flame, .fx .sprite, .fx .fx-count, .fx .fx-target-warn, .fx .fx-signal.broken,
+  .map.shake, .clock.jump, .instr.backup, .gauge.pulse .bar-fill { animation: none; }
+  .gauge .delta, .clock .delta { animation: none; opacity: 1; }
+  .instr { transition: none; }
+}
+
+/* ---- Review fixes (Stage 7): rings, card placement, sprite slide, marks, reduced motion ---- */
+@keyframes fx-ring { from { r: 8px; opacity: .9; } to { r: 42px; opacity: 0; } }
+@media (min-width: 801px) { .overlay.beside { justify-content: flex-end; padding-right: 28px; } }
+.fx .sprite { transition: transform .4s ease; }
+.fx .sprite.drifted { transform: translate(0, 6px); }
+.gauge .delta { top: -18px; }
+.instr { display: inline-block; }
+.mark { position: relative; }
+.mark .mark-tip { display: none; position: absolute; left: 0; top: calc(100% + 4px); z-index: 6; width: 240px; white-space: normal; background: var(--panel2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; color: var(--text); font-size: 12px; line-height: 1.4; }
+.mark:hover .mark-tip, .mark:focus-visible .mark-tip { display: block; }
+@media (prefers-reduced-motion: reduce) {
+  .fx .sprite, .fx .sprite.flicker, .fx .sprite.offline, .fx .sprite.wiggle, .fx .sprite.flypast { animation: none; transition: none; }
+}
+
+/* ---- Stage 8: fit every screen on a laptop ---- */
+.app { padding: 16px 16px 24px; }
+h2 { font-size: 22px; }
+/* No text under 12 px anywhere (marks, chips, map labels, badges) */
+.gauge .sub, .mark, .instr, .chips .chip, .mark .mark-tip { font-size: 12px; }
+.map .label { font-size: 12px; }
+.fx .fx-marker text { font-size: 12px; }
+.instr .badge { font-size: 12px; width: 16px; height: 16px; top: -8px; right: -6px; }
+
+/* Cockpit: the whole viewport is the screen; nothing scrolls except the log strip and a long card */
+.app-cockpit { max-width: none; height: 100vh; height: 100dvh; padding: 8px 12px; overflow: hidden; display: flex; flex-direction: column; }
+.mission-screen { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.cockpit-bar { margin-bottom: 8px; flex-wrap: nowrap; gap: 10px; }
+.cockpit-bar h2 { font-size: 18px; white-space: nowrap; }
+.cockpit-bar h2 small { font-size: 13px; font-weight: 400; }
+.cockpit-bar .status { flex: 1; min-width: 0; margin: 0; padding: 5px 10px; font-size: 14px; border-radius: 8px; gap: 8px; flex-wrap: nowrap; overflow: hidden; }
+.cockpit-bar .status .chip { white-space: nowrap; }
+.cockpit-bar .clock { white-space: nowrap; font-size: 14px; }
+.cockpit-bar .controls { flex-wrap: nowrap; gap: 8px; }
+.cockpit-bar .controls button { padding: 5px 10px; font-size: 13px; white-space: nowrap; }
+.cockpit-bar .speed button { min-width: 44px; }
+.cockpit { flex: 1; min-height: 0; display: grid; gap: 10px; grid-template-columns: minmax(0, 11fr) minmax(0, 9fr); grid-template-rows: minmax(0, 1fr) auto; grid-template-areas: "map gauges" "log log"; }
+.cockpit .map { grid-area: map; position: relative; min-height: 0; overflow: hidden; display: flex; }
+.cockpit .map svg { width: 100%; height: 100%; }
+.cockpit .gauges { grid-area: gauges; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; min-height: 0; }
+.cockpit .gauges > :last-child { grid-column: 1 / -1; }
+.cockpit .gauge { padding: 6px 10px; }
+.cockpit .gauge .bar-head { margin-bottom: 4px; font-size: 12px; }
+.cockpit .gauge .bar-track { height: 6px; }
+.cockpit .gauge .sub { margin-top: 3px; line-height: 1.2; }
+.cockpit .gauge .extras { flex-wrap: nowrap; }
+.cockpit .instr, .cockpit .mark { padding: 0 7px; white-space: nowrap; line-height: 18px; }
+.cockpit .gauge .delta { top: 2px; right: 8px; padding: 1px 7px; }
+.cockpit .log { grid-area: log; position: relative; margin: 0; padding: 6px 12px; height: 104px; max-height: none; display: flex; flex-direction: column; overflow: visible; }
+.cockpit .log h4 { margin: 0 0 4px; }
+.cockpit .log ul { overflow: auto; flex: 1; min-height: 0; }
+.cockpit .log li { padding: 2px 0; font-size: 13px; line-height: 1.35; }
+.log .info { margin-left: 8px; padding: 0 6px; font-size: 12px; line-height: 18px; border-radius: 999px; }
+.log .popover { position: absolute; left: 12px; right: 12px; bottom: calc(100% + 6px); z-index: 20; background: var(--panel2); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 40px 8px 14px; box-shadow: 0 10px 30px rgba(0, 0, 0, .5); font-size: 13px; line-height: 1.4; }
+.log .popover p { margin: 0 0 4px; }
+.log .popover .close { position: absolute; top: 6px; right: 8px; padding: 2px 7px; font-size: 12px; }
+/* The challenge card sits over the map only */
+.overlay.on-map { position: absolute; inset: 0; border-radius: 14px; padding: 10px; }
+.overlay.on-map .modal { max-height: 100%; padding: 12px 16px 10px; max-width: 520px; }
+.overlay.on-map .modal h3 { margin: 8px 0 4px; font-size: 19px; }
+.overlay.on-map .modal .explain { margin: 0 0 6px; font-size: 14px; line-height: 1.35; }
+.overlay.on-map .options { gap: 6px; margin: 8px 0 6px; }
+.overlay.on-map .options .option { padding: 7px 12px; font-size: 14px; }
+.overlay.on-map .modal .small { margin: 0; }
+.tags { gap: 6px; }
+.tag.common { color: var(--text); border: 1px solid var(--border); }
+.why .link { font-size: 13px; text-decoration: none; }
+.why .context { margin: 4px 0 0; font-size: 13px; line-height: 1.4; }
+.why .context p { margin: 2px 0; }
+/* What a choice changes, in colour: green = no cost, red = loss, amber = a chance, blue = time */
+.affects { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.affect { font-size: 12px; font-weight: 500; border-radius: 999px; padding: 0 8px; line-height: 18px; border: 1px solid; background: var(--panel2); }
+.affect.gain { color: var(--ok); border-color: var(--ok); }
+.affect.loss { color: var(--bad); border-color: var(--bad); }
+.affect.risk { color: var(--warn); border-color: var(--warn); }
+.affect.time { color: var(--accent); border-color: var(--accent); }
+.option .affects { pointer-events: none; }
+/* Design Lab accordion: one group open, the others on one line */
+.bars { padding: 8px 0; }
+.bar-head { margin-bottom: 4px; }
+.lab { gap: 16px; }
+.parts section.acc { padding: 0; margin-bottom: 6px; overflow: hidden; }
+.acc-h { margin: 0; text-transform: none; letter-spacing: 0; font-size: 14px; color: var(--text); }
+.acc-head { width: 100%; display: flex; gap: 10px; align-items: center; background: none; border: 0; border-radius: 0; padding: 9px 14px; text-align: left; font-size: 14px; color: var(--text); }
+.acc-head:hover { background: var(--panel2); }
+.acc-head:focus-visible { outline: 2px solid var(--warn); outline-offset: -2px; }
+.acc-title { font-weight: 600; white-space: nowrap; }
+.acc-summary { flex: 1; min-width: 0; color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.acc.open .acc-head { border-bottom: 1px solid var(--border); }
+.acc-panel { padding: 6px 8px 8px; }
+.acc-panel .item { padding: 4px 8px; }
+.acc-panel .item small { line-height: 1.3; }
+.acc-panel .muted.small { margin: 2px 0 4px; }
+.acc-panel .fuel { padding: 6px 8px 0; }
+.acc-panel .fuel input[type="range"] { width: 100%; }
+.summary { top: 74px; padding: 14px 16px; }
+.summary p { margin: 6px 0; }
+.summary .problems { margin: 6px 0; }
+.summary button.big { margin: 10px 0 6px; }
+/* Launch: calendar beside the route, the checks and the button below, real missions folded away */
+.launch h2 { margin: 0; }
+.launch-top { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; align-items: start; margin-top: 8px; }
+.launch-top h4 { margin-top: 0; }
+.launch .calendar { gap: 4px; }
+.launch .month { padding: 4px 2px; max-height: 40px; }
+.launch .window-msg { margin: 8px 0 0; padding: 6px 10px; font-size: 14px; }
+.launch .item { padding: 6px 10px; }
+.launch-checks { position: static; margin-top: 12px; padding: 12px 16px; }
+.checks-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: center; }
+.launch-checks h3 { margin-bottom: 4px; }
+.launch .checks { margin: 0; }
+.launch .checks li { padding: 3px 0; font-size: 14px; }
+.launch-go { text-align: right; }
+.launch-go p { margin: 0 0 4px; line-height: 1.5; }
+.launch-go button.big { margin: 6px 0; }
+.learn-more { margin-top: 12px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 8px 14px; }
+.learn-more summary { cursor: pointer; font-weight: 600; }
+.learn-more p { margin: 8px 0 0; color: var(--muted); }
+/* Results: score and the Flight Director left, what happened and the real mission right */
+.result { max-width: none; text-align: left; }
+.result-head { margin-bottom: 4px; }
+.result-head h2 { margin: 0; }
+.result-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 20px; align-items: start; }
+.result .stars-row { justify-content: flex-start; margin: 8px 0 10px; }
+.result .lead { margin: 0 0 12px; }
+.result .director { margin: 0; }
+.result-right .summary.left { margin: 0 0 14px; }
+.result .decisions li { margin-bottom: 12px; }
+.result .story { display: block; margin-top: 4px; }
+.result .affects { margin-top: 6px; }
+/* Under 800 px: the stacked layout, scrolling allowed */
+@media (max-width: 800px) {
+  .app-cockpit { height: auto; overflow: visible; display: block; }
+  .cockpit { display: flex; flex-direction: column; }
+  .cockpit .map { overflow: visible; display: block; }
+  .cockpit .map svg { height: auto; }
+  .cockpit .gauges { grid-template-columns: 1fr; }
+  .cockpit .gauges > :last-child { grid-column: auto; }
+    .cockpit .gauge .extras { flex-wrap: wrap; }
+  .cockpit .log { height: auto; max-height: 220px; }
+  .overlay.on-map { position: fixed; border-radius: 0; }
+  .cockpit-bar, .cockpit-bar .controls, .cockpit-bar .status { flex-wrap: wrap; }
+  .launch-top, .checks-grid, .result-grid { grid-template-columns: 1fr; }
+  .launch-go { text-align: left; }
+}
+/* Stage 8 measured fixes: two columns inside an open group so the tallest one (instruments) fits at 1366×650; the calendar year is never under 12 px */
+.acc-head { padding: 7px 14px; }
+.acc-panel [role="radiogroup"], .acc-panel [role="group"] { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 8px; }
+.acc-panel [role="group"] > p { grid-column: 1 / -1; }
+.month small { font-size: 12px; }
+@media (max-width: 800px) { .acc-panel [role="radiogroup"], .acc-panel [role="group"] { grid-template-columns: 1fr; } }
+/* Marks and instrument chips share one row; Fuel and Science (the gauges that collect marks) take the full width */
+.extras { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.cockpit .gauges > :first-child, .cockpit .gauges > :last-child { grid-column: 1 / -1; }
+.cockpit .gauge .extras { flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.cockpit .gauge .delta { top: 18px; }
+.acc-panel .item { font-size: 14px; }
+.acc-panel .item small { font-size: 12px; }
+@media (max-width: 800px) { .cockpit .gauges > :first-child { grid-column: auto; } }
+/* In the cockpit a delta label fades in place on the bar row (never over the value), and the clock's shows below the clock */
+.cockpit .gauge .delta { top: 19px; right: 8px; animation-name: fx-float-flat; }
+.cockpit-bar .clock .delta { top: calc(100% + 4px); right: 0; animation-name: fx-float-flat; }
+@keyframes fx-float-flat { 0% { opacity: 0; transform: translateY(4px); } 15% { opacity: 1; transform: none; } 70% { opacity: 1; } 100% { opacity: 0; } }
+/* Narrow laptops (801–1180 px): the status line takes its own row in the top bar instead of being squeezed */
+@media (max-width: 1180px) and (min-width: 801px) {
+  .cockpit-bar { flex-wrap: wrap; row-gap: 6px; }
+  .cockpit-bar .status { flex-basis: 100%; order: 10; }
+}
+
+/* ---- Stage 8 review fixes: layering, a fixed-height top bar, tooltips and narrow laptops ---- */
+/* text only a screen reader reads (state words on the gauge chips and marks) */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+/* the clock's "+N days" label sits over the gauges, not behind them */
+.cockpit-bar .clock .delta { z-index: 30; }
+/* the status never grows the bar: long sentences are cut with an ellipsis, the risk chip keeps its size */
+.cockpit-bar .status .status-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cockpit-bar .status .chip { flex: none; }
+/* mark tooltips stay inside their gauge card, which is always on screen */
+.cockpit .mark { position: static; }
+.cockpit .gauge .mark-tip { left: 10px; right: 10px; width: auto; }
+/* the log strip can be scrolled with the keyboard */
+.log ul:focus-visible { outline: 3px solid var(--warn); outline-offset: -3px; }
+/* the Design Lab column may shrink: without this the nowrap headers push the page sideways */
+.parts { min-width: 0; }
+/* 801–960 px: twelve calendar columns leave no room for "May ✓ 2027", so use six */
+@media (max-width: 960px) and (min-width: 801px) { .launch .calendar { grid-template-columns: repeat(6, 1fr); } }
+/* under 800 px the status gets its own row too, and the risk chip may wrap */
+@media (max-width: 800px) {
+  .cockpit-bar .status { flex-basis: 100%; }
+  .cockpit-bar .status .chip { white-space: normal; }
+  .cockpit-bar .status .status-text { white-space: normal; overflow: visible; }
+}
+/* the "what just changed" pill sits on the thin bar, so it never covers the number it explains */
+.cockpit .gauge .delta { top: 22px; right: 8px; padding: 0 8px; font-size: 12px; line-height: 16px; }
+
+/* ---- Stage 9: chances worth taking, and the mission risk number ---- */
+/* an opportunity is a chance, not a crisis: green everywhere the challenge card is amber */
+.modal.opportunity { border-color: var(--ok); }
+.modal.opportunity .countdown { color: var(--ok); }
+.modal.opportunity .options .option:hover { border-color: var(--ok); }
+.kindTag { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 600; border: 1px solid var(--warn); color: var(--warn); }
+.modal.opportunity .kindTag { border-color: var(--ok); color: var(--ok); }
+.because { margin: 4px 0 0; font-size: 13px; color: var(--accent); }
+/* the one number that says how much has been gambled so far */
+.risk { position: relative; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 14px; padding: 3px 10px; border: 1px solid var(--border); border-radius: 999px; cursor: help; }
+.risk .dot { width: 10px; height: 10px; border-radius: 999px; background: var(--ok); }
+.risk.medium .dot { background: var(--warn); }
+.risk.high .dot { background: #ff8a3c; }
+.risk.very-high .dot { background: var(--bad); }
+.risk.medium { border-color: var(--warn); }
+.risk.high { border-color: #ff8a3c; }
+.risk.very-high { border-color: var(--bad); }
+.risk:focus-visible { outline: 2px solid var(--warn); }
+.risk .mark-tip { display: none; position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; width: 260px; white-space: normal; background: var(--panel2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 12px; line-height: 1.4; color: var(--text); }
+.risk:hover .mark-tip, .risk:focus-visible .mark-tip { display: block; }
+.risk.bump { animation: fx-risk 1.2s ease-out; }
+@keyframes fx-risk { 0%, 100% { transform: scale(1); } 20% { transform: scale(1.12); } }
+/* a decision that won something reads as good news */
+.decisions li.won .verdict { color: var(--ok); }
+.result .decisions li.won b { color: var(--ok); }
+@media (prefers-reduced-motion: reduce) { .risk.bump { animation: none; } }
+/* the card header holds three tags now, so the countdown keeps its place on the right */
+.modal > .row.between { flex-wrap: nowrap; gap: 10px; align-items: flex-start; }
+.modal .tags { min-width: 0; flex-wrap: wrap; row-gap: 4px; }
+.modal .countdown { flex: none; }
+.tag.common { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---- Stage 10: what a part DOES, under what it is ---- */
+.effect { display: block; color: #b9c6ea; line-height: 1.35; margin-top: 1px; }
+.item.on .effect { color: #d4defa; }
+/* Where the numbers come from */
+.provenance-note { margin: 8px 0 0; line-height: 1.5; }
+.provenance-note .link { font-size: 12px; }
+.modal.provenance { max-width: 640px; }
+.prov-group { margin-top: 12px; }
+.prov-group h4 { margin: 0 0 6px; text-transform: none; letter-spacing: 0; font-size: 14px; color: var(--text); }
+.prov-group h4 .muted { font-weight: 400; font-size: 13px; }
+.prov-group ul { list-style: none; padding: 0; margin: 0; }
+.prov-group li { padding: 6px 0; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.45; }
+.prov-tag { display: inline-block; border-radius: 999px; padding: 0 8px; margin-right: 8px; font-size: 12px; line-height: 18px; border: 1px solid; }
+.prov-tag.formula { color: var(--accent); border-color: var(--accent); }
+.prov-tag.real { color: var(--ok); border-color: var(--ok); }
+.prov-tag.game { color: var(--muted); border-color: var(--border); }
+.effect.inline { display: inline; }
+.acc-panel .item { padding: 3px 8px; }
+.acc-panel .item small { line-height: 1.3; }
+/* The three things that make a mission hard, on its card */
+.facts-line { margin: 0 0 10px; color: var(--muted); }
+.mission-chips { gap: 6px; margin: 0 0 14px; }
+.mission-chips .affect { font-size: 13px; line-height: 22px; cursor: help; }
+/* The spacecraft in one line, so the player can still see what they built */
+.ship-line { display: flex; align-items: center; gap: 0; max-height: 28px; white-space: nowrap; overflow: hidden; font-size: 13px; color: var(--muted); }
+.ship-line .sep { opacity: .5; }
+.ship-line .ship-fuel { color: var(--text); }
+.ship-line .ship-edit { margin-left: 10px; font-size: 13px; }
+.ship-line .ship-fuel.bump { animation: fx-fuel 1.2s ease-out; }
+@keyframes fx-fuel { 0%, 100% { color: var(--text); } 25% { color: var(--warn); } }
+.cockpit-bar { flex-wrap: wrap; row-gap: 2px; }
+.cockpit-bar .ship-row { flex-basis: 100%; order: 10; min-width: 0; }
+.cockpit-bar .ship-row .ship-line { font-size: 12px; max-height: 18px; }
+.launch-bar { align-items: center; gap: 12px; }
+.launch-bar .ship-line { flex: 1; min-width: 0; }
+@media (max-width: 900px) { .ship-line .extra { display: none; } }
+@media (prefers-reduced-motion: reduce) { .ship-line .ship-fuel.bump { animation: none; } }
+/* Launch ── Cruise ── Arrival burn ── In orbit */
+.cockpit-bar .ship-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.timeline { display: flex; align-items: center; gap: 0; list-style: none; margin: 0; padding: 0; max-height: 24px; font-size: 12px; }
+.timeline .step { display: flex; align-items: center; gap: 4px; color: var(--muted); white-space: nowrap; }
+.timeline .step + .step::before { content: ""; width: 26px; height: 1px; background: var(--border); margin: 0 8px; }
+.timeline .dot { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; line-height: 1; }
+.timeline .step.done { color: var(--ok); }
+.timeline .step.done .dot { border-color: var(--ok); }
+.timeline .step.current { color: var(--text); font-weight: 600; }
+.timeline .step.current .dot { border-color: var(--accent); background: var(--accent); animation: fx-step 1.6s ease-in-out infinite; }
+.timeline .step.failed { color: var(--bad); font-weight: 600; }
+.timeline .step.failed .dot { border-color: var(--bad); color: var(--bad); }
+@keyframes fx-step { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (max-width: 900px) { .timeline .step:not(.current) .step-label { display: none; } }
+@media (prefers-reduced-motion: reduce) { .timeline .step.current .dot { animation: none; } }
+
+/* ---- Stage 11: the sky ---- */
+.sky-star { fill: #eef2ff; }
+.sky-star.blue { fill: #cfe0ff; }
+.sky-star.amber { fill: #ffe6bf; }
+@keyframes sky-twinkle { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+.sky-star.twinkle { animation: sky-twinkle 4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .sky-star.twinkle { animation: none; } }
+/* ---- Stage 11 Part 2: the mission wins every time ---- */
+/* orbits read clearly, and the path already flown is the brightest line on the map */
+.map .orbit { stroke: #6d81c4; stroke-opacity: .85; stroke-width: 1.1; }
+.map .trail { stroke: #8fc2ff; stroke-opacity: 1; stroke-width: 2.4; }
+/* the Sun: warm core, soft corona */
+.map .sun-core { filter: none; }
+.map .sun-corona { opacity: 1; }
+/* planets are bodies, not dots: a thin bright rim gives them an edge */
+.map .planet { stroke: #ffffff; stroke-opacity: .75; stroke-width: 1.2; }
+/* every label sits on its own dark pill */
+.map .label-pill { fill: rgba(5, 8, 20, .66); }
+.map .label { fill: #e8ecf8; font-weight: 600; }
+/* the spacecraft never disappears against a star */
+.fx .ship-halo { fill: #ffffff; opacity: .16; }
+
+/* ---- Stage 11 Part 3: space view ---- */
+/*
+ * One mode, two halves: our immersive layout (always works) and browser fullscreen (a bonus).
+ * The map fills the viewport and every panel floats over it, so the player is inside the picture.
+ * Panels use a scrim dark enough for AA text over the brightest part of the sky; backdrop-filter is
+ * an enhancement, and the same rgba works without it.
+ */
+/* the two text colours every floating panel uses; the contrast test reads them from here */
+.mission-screen.space { --hud-text: #f3f6ff; --hud-text-dim: #eaefff; }
+.space .cockpit { position: fixed; inset: 0; display: block; z-index: 1; }
+.space .map { position: absolute; inset: 0; margin: 0; padding: 0; border: 0; border-radius: 0; background: #05070f; }
+.space .map svg { width: 100%; height: 100%; }
+
+.mission-screen.space > .cockpit-bar,
+.space .gauges,
+.space .log {
+  position: fixed;
+  z-index: 20;
+  background: rgba(12, 17, 36, .72);
+  border: 1px solid rgba(160, 180, 255, .22);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+  transition: opacity .35s ease;
+}
+@supports (backdrop-filter: blur(8px)) {
+  .mission-screen.space > .cockpit-bar,
+  .space .gauges,
+  .space .log { background: rgba(12, 17, 36, .55); backdrop-filter: blur(8px); }
+}
+/* the clock, the scale, the risk, the speed buttons and the ship line, top left */
+.mission-screen.space > .cockpit-bar {
+  top: 12px; left: 12px; width: max-content; max-width: 360px; margin: 0; padding: 7px 10px;
+  row-gap: 4px; column-gap: 8px; flex-wrap: wrap;
+}
+/* the strip holds the clock, the scale, the risk and the speed buttons, and nothing else */
+.space .cockpit-bar h2,
+.space .cockpit-bar .ship-row { display: none; }
+/* the status still reaches a screen reader, it just does not take a row of the strip */
+.space .cockpit-bar .status {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+.space .cockpit-bar .clock { flex-basis: 100%; font-size: 13px; }
+.space .cockpit-bar .controls { gap: 6px; }
+.space .cockpit-bar .controls button { padding: 3px 8px; font-size: 12px; }
+.space .cockpit-bar .speed button { min-width: 34px; }
+.space .cockpit-bar .mute { display: none; }
+.space .risk { font-size: 12px; padding: 2px 8px; }
+/* the gauges become one HUD row along the bottom */
+.space .gauges {
+  left: 50%; transform: translateX(-50%); bottom: 12px; right: auto;
+  width: max-content; max-width: calc(100vw - 48px);
+  display: flex; flex-direction: row; flex-wrap: nowrap; gap: 14px; padding: 7px 14px; align-items: center;
+}
+.space .gauges > * { flex: none; min-width: 0; grid-column: auto !important; background: none; border: 0; box-shadow: none; padding: 0; }
+.space .gauges .bar-head { display: flex; gap: 6px; white-space: nowrap; font-size: 13px; }
+.space .gauges .bar-track { display: none; }
+.space .gauges .sub { display: none; }
+.space .gauges .extras { display: none; }
+/* the log floats top right, newest at the bottom, scrollable for more */
+.space .log { top: 12px; right: 12px; width: 340px; max-width: 34vw; height: auto; max-height: 168px; padding: 7px 12px; }
+.space .log ul { display: flex; flex-direction: column-reverse; max-height: 124px; }
+.space .log li { padding: 2px 0; }
+/* a panel the spacecraft is flying under steps out of the way */
+.space .dim { opacity: .25; }
+/* the challenge card still belongs over the map, and still wins the screen */
+.space .overlay.on-map { position: fixed; inset: 0; z-index: 40; padding: 0; }
+.space .overlay.on-map .modal { max-width: 560px; }
+@media (prefers-reduced-motion: reduce) {
+  .mission-screen.space > .cockpit-bar, .space .gauges, .space .log { transition: none; }
+}
+/* in space view the ship line and the timeline stack, so neither is cut off */
+.space .ship-row { flex-direction: column; align-items: flex-start; gap: 2px; }
+.space .gauges .bar-head { color: var(--hud-text); }
+.space .gauges .sub, .space .space-note, .space .log li, .space .log li b,
+.space .cockpit-bar .muted, .space .provenance-note { color: var(--hud-text-dim); }
+/* Stage 11 Part 4: the map earns its size */
+.map .path-ahead { fill: none; stroke: #8fc2ff; stroke-opacity: .3; stroke-width: 1.4; stroke-dasharray: 5 6; }
+.map .scale-bar line { stroke: #cdd8f5; stroke-width: 1.2; stroke-opacity: .85; }
+.map .scale-bar text { fill: #cdd8f5; font-size: 11px; }
+.space .gauges .space-note { flex: none; margin: 0; padding-left: 10px; border-left: 1px solid rgba(160,180,255,.22); max-width: 260px; line-height: 1.35; }
+/* the 3-2-1 countdown is drawn in map units, so it is halved when the map is doubled in space view */
+.space .fx .fx-count { font-size: 26px; }
+/* the flight-plan toggle and the honesty line sit at the end of the HUD row */
+.hud-extra { display: flex; align-items: center; gap: 10px; padding-left: 12px; border-left: 1px solid rgba(160,180,255,.22); }
+.plan-toggle { display: flex; align-items: center; gap: 5px; font-size: 12px; white-space: nowrap; cursor: pointer; color: var(--hud-text); }
+.plan-note { font-size: 12px; max-width: 200px; line-height: 1.3; color: var(--hud-text-dim); }
+.space .gauges .space-note { flex: none; margin: 0; padding: 0; border: 0; max-width: 210px; line-height: 1.3; }
+/* the fading lead ahead of the spacecraft: a stroke, never a filled shape */
+.map .path-lead { fill: none; stroke-width: 2.4; stroke-linecap: round; }
+/* a decision marker on the trail reads over any star */
+.fx .fx-marker .marker-pill { fill: rgba(5, 8, 20, .66); }
+
+/* ---- Stage 12: the spacecraft you built ---- */
+/* The schematic is the same geometry as the map sprite, drawn big. Outlines are 1px whatever the
+   scale, so a part is as easy to pick out on a small bus as on a large one. */
+.schematic { width: 100%; height: auto; max-width: 180px; display: block; }
+.schematic .part * { vector-effect: non-scaling-stroke; }
+.schematic .s-bus { fill: #dde5ff; stroke: #93a6e2; stroke-width: 1; }
+.schematic .s-panel { fill: #3c60c4; stroke: #8fabf5; stroke-width: 1; }
+.schematic .s-join { stroke: #8fabf5; stroke-width: 1; }
+.schematic .s-rtg { fill: #c6a86a; stroke: #8d7746; stroke-width: 1; }
+.schematic .s-fin { stroke: #8d7746; stroke-width: 1; }
+.schematic .s-mast { fill: #c9d3f5; }
+.schematic .s-dish { fill: #f4f7ff; stroke: #93a6e2; stroke-width: 1; }
+.schematic .s-sensor { fill: #ffd166; stroke: #b98d2a; stroke-width: 1; }
+.schematic .s-nozzle { fill: #c3c9de; stroke: #8b93ad; stroke-width: 1; }
+.schematic .s-grid { fill: #6d79a0; stroke: #c3c9de; stroke-width: 1; }
+.schematic .s-grid-line { stroke: #cdd6f6; stroke-width: 1; }
+/* the part a challenge is happening to */
+.schematic .part.hit * { stroke: var(--warn); stroke-width: 2; }
+
+/* ---- Stage 12 Part 2: the challenge happens on your spacecraft ---- */
+/* The card is two columns: the machine on the left, what to do about it on the right. On a short
+   screen the picture gives way first, because the buttons are the game and the picture is a help. */
+.card-body { display: flex; gap: 14px; align-items: flex-start; min-width: 0; }
+.card-body .card-words { flex: 1; min-width: 0; }
+.ship-panel { flex: none; width: 128px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.ship-panel .schematic { max-width: 128px; }
+.ship-panel .part-name { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.25; min-height: 15px; }
+@media (max-width: 720px), (max-height: 620px) { .ship-panel { display: none; } }
+/* the part that is going wrong, and what that looks like */
+.schematic .part.dmg-dust .s-panel { fill: #7b7566; }
+.schematic .part.dmg-dust .s-join { stroke: #9a927f; }
+.schematic .part.dmg-dark * { fill: #3a3f55; stroke: #6a7392; }
+.schematic .s-dent { fill: var(--panel); stroke: var(--warn); stroke-width: 1; }
+/* the part the option in hand would change: ringed, so it never fights with the part that is broken */
+.schematic .part.aim * { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 3 2; }
+
+/* ---- Stage 12 Part 3: the two-second beat before the card ---- */
+.beat { pointer-events: none; }
+/* space view keeps the strip small: the animations setting is a choice made before the demo, not during it */
+.space .cockpit-bar .animations { display: none; }
+.beat-grain { fill: #c9b48a; opacity: 0; animation: beat-blow 1.6s ease-out forwards; }
+@keyframes beat-blow { 0% { opacity: 0; transform: translateX(-10px); } 25% { opacity: .95; } 100% { opacity: 0; transform: translateX(46px); } }
+.beat-rock polygon { fill: #b9b3a6; }
+/* every moving piece turns and grows about ITSELF, not about the middle of the map */
+.beat-rock, .beat-swing, .beat-spark, .beat-ring, .beat-star, .beat-grain, .beat-particle { transform-box: fill-box; transform-origin: center; }
+.beat-rock { animation: beat-tumble 1.9s linear forwards; }
+@keyframes beat-tumble { from { transform: translate(0, 0) rotate(0); } to { transform: translate(84px, 52px) rotate(540deg); } }
+.beat-link { stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: 4 3; animation: beat-break 1.8s ease-in forwards; }
+@keyframes beat-break { 0% { opacity: .9; } 55% { opacity: .9; } 60% { opacity: 0; } 100% { opacity: 0; } }
+.beat-swing { fill: none; stroke: var(--warn); stroke-width: 1.6; opacity: 0; animation: beat-pop 1.8s ease-out forwards; animation-delay: .5s; }
+.beat-flare { fill: var(--warn); opacity: 0; animation: beat-flash 1.7s ease-out forwards; }
+@keyframes beat-flash { 0% { opacity: 0; } 20% { opacity: .55; } 100% { opacity: 0; } }
+.beat-particle { fill: #ffd7a0; opacity: 0; animation: beat-fly 1.8s ease-in forwards; }
+@keyframes beat-fly { 0% { opacity: 0; transform: translate(0, 0); } 15% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)); } }
+.beat-blink { fill: none; stroke: var(--warn); stroke-width: 2; animation: beat-flicker .3s steps(2) 5; }
+.beat-mark, .beat-star { fill: var(--warn); font-size: 13px; font-weight: 700; text-anchor: middle; }
+.beat-star { fill: var(--ok); animation: beat-pop 1.6s ease-out forwards; }
+.beat-ray { stroke: #ffe6b0; stroke-width: 1.2; opacity: 0; animation: beat-shine 1.7s ease-out forwards; }
+@keyframes beat-shine { 0% { opacity: 0; } 30% { opacity: .75; } 100% { opacity: 0; } }
+.beat-spark, .beat-ring { fill: none; stroke-width: 2; animation: beat-pop 1.8s ease-out forwards; }
+.beat-spark { stroke: var(--ok); }
+.beat-ring { stroke: var(--warn); }
+@keyframes beat-pop { from { opacity: .9; transform: scale(.7); } to { opacity: 0; transform: scale(2.6); } }
+@keyframes beat-flicker { 0%, 100% { opacity: 1; } 50% { opacity: .2; } }
+
+/* Team mode (Stage 13) */
+.team-setup .team-list { list-style: none; padding: 0; margin: 20px 0 12px; display: grid; gap: 10px; text-align: left; }
+.team-player { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; }
+.name-input { background: var(--panel2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 16px; flex: 1; min-width: 0; }
+.name-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.role-line { margin: 8px 0 0; font-size: 14px; }
+.center-row { justify-content: center; }
+.owner-badge { font-size: 12px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 0 8px; line-height: 18px; white-space: nowrap; text-transform: none; letter-spacing: 0; font-weight: 500; }
+.acc-head .owner-badge { flex: none; }
+.team-goals { margin-top: 12px; }
+.team-goals h4 { margin: 0 0 6px; }
+.team-goals ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.team-goals li { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 1.35; }
+.team-goals li.met b { color: var(--ok); }
+.launch-checks .team-goals ul { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.signoff { display: grid; gap: 4px; margin: 4px 0; justify-items: end; text-align: right; }
+.signoff .row { gap: 6px; }
+.signoff button { padding: 6px 10px; font-size: 13px; }
+.signoff button.signed { border-color: var(--ok); color: var(--ok); background: rgba(60,207,122,.12); }
+.caller { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: var(--accent); }
+.team-result { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 12px 0; }
+.team-result .lead { margin: 4px 0 8px; }
+.team-goals.compact li { font-size: 12px; line-height: 1.3; }
+.team-goals.compact ul { gap: 3px; }
+.launch-checks .team-goals.compact ul { grid-template-columns: repeat(4, 1fr); }
+.team-goals.compact + .provenance-note, .summary .team-goals.compact { margin-top: 8px; }
+
+/* Stage 14: part cards a new player can read, and controls that say which one matters */
+.bars .bar-head span:first-child { font-weight: 600; }
+.bar-state { font-weight: 600; color: var(--ok); }
+.bar.bad .bar-state { color: var(--bad); }
+.bar-hint { font-size: 12px; color: var(--muted); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.parts section.acc.open { border-color: var(--accent); }
+.acc-panel [role="radiogroup"], .acc-panel [role="group"] { gap: 6px 8px; }
+.acc-panel .item.opt { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; background: rgba(255, 255, 255, .02); transition: border-color .15s, background .15s; }
+.acc-panel .item.opt:hover { border-color: var(--accent); background: var(--panel2); }
+.acc-panel .item.opt.on { border-color: var(--accent); background: rgba(79, 140, 255, .13); box-shadow: inset 3px 0 0 var(--accent); }
+.item.opt:focus-within { outline: 2px solid var(--warn); outline-offset: 1px; }
+.opt-mark { flex: none; width: 18px; height: 18px; margin-top: 1px; border: 2px solid var(--muted); display: grid; place-items: center; font-size: 12px; font-weight: 800; color: var(--bg); line-height: 1; }
+.opt-mark.radio { border-radius: 50%; }
+.opt-mark.checkbox { border-radius: 5px; }
+.item.opt.on .opt-mark { background: var(--accent); border-color: var(--accent); }
+.opt-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.opt-title { font-size: 14px; line-height: 1.3; }
+.opt-title .muted { font-size: 13px; }
+.opt-stats { display: flex; flex-wrap: wrap; gap: 4px; }
+.stat { font-size: 12px; line-height: 18px; padding: 0 7px; border-radius: 999px; background: #0d1430; border: 1px solid var(--border); color: #c9d3f2; white-space: nowrap; }
+.acc-panel .item.opt .effect { font-size: 12px; color: #b9c6ea; margin: 0; }
+.acc-panel .item.opt.on .effect { color: #e1e8ff; }
+
+.acc-panel .fuel { margin: 8px 0 0; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; }
+.acc-panel .fuel .row.between { margin-bottom: 6px; font-size: 14px; }
+button.fuel-fill { padding: 4px 10px; font-size: 13px; border-color: var(--accent); color: #cfe0ff; background: rgba(79, 140, 255, .12); }
+.acc-panel .fuel input[type="range"] { accent-color: var(--accent); }
+
+.cockpit-bar .speed.seg { display: inline-flex; align-items: center; gap: 0; border: 1px solid var(--border); border-radius: 10px; background: var(--panel); padding: 2px; }
+.seg-label { font-size: 12px; color: var(--muted); padding: 0 8px 0 6px; text-transform: uppercase; letter-spacing: .05em; }
+.cockpit-bar .speed.seg button { border: 0; border-radius: 8px; background: transparent; min-width: 0; padding: 4px 10px; }
+.cockpit-bar .speed.seg button:hover:not(:disabled) { background: var(--panel2); }
+.cockpit-bar .speed.seg button.on { background: var(--accent); color: var(--bg); }
+.cockpit-bar .view-toggles { gap: 2px; flex-wrap: nowrap; padding-left: 8px; border-left: 1px solid var(--border); }
+.cockpit-bar .view-toggles button { background: transparent; border-color: transparent; color: var(--muted); padding: 4px 8px; }
+.cockpit-bar .view-toggles button:hover { color: var(--text); border-color: var(--border); background: var(--panel2); }
+.space .seg-label { display: none; }
+/* Stage 14: keep the Design Lab on one laptop screen with the bigger cards */
+.bars { padding: 8px 0; }
+.bars .bar { padding: 6px 12px; }
+.bars .bar-head { margin-bottom: 4px; }
+.bar-hint { margin-top: 3px; }
+.acc-head { padding: 5px 14px; }
+.parts section.acc { margin-bottom: 4px; }
+.acc-panel { padding: 4px 8px 8px; }
+.acc-panel .item.opt { padding: 6px 10px; }
+.opt-body { gap: 3px; }
+.acc-panel [role="radiogroup"], .acc-panel [role="group"] { gap: 5px 8px; }
+.acc-panel { padding-bottom: 5px; }
+.acc-panel > [role="group"] > p.muted.small { margin: 0 0 2px; }
+
+/* Stage 15: the 3D view */
+.cockpit-bar .view-toggles button.toggle-3d { color: #cfe0ff; border-color: var(--accent); background: rgba(79, 140, 255, .14); font-weight: 600; }
+.cockpit-bar .view-toggles button.toggle-3d:hover { background: rgba(79, 140, 255, .28); }
+.cockpit-bar .view-toggles button.toggle-3d.on { background: var(--accent); color: var(--bg); }
+.view3d { position: relative; width: 100%; border-radius: 10px; overflow: hidden; background: #03050d; }
+.view3d-canvas, .view3d-canvas canvas, .labels3d { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
+.view3d-canvas canvas { display: block; cursor: grab; touch-action: none; }
+.view3d-canvas canvas:active { cursor: grabbing; }
+.labels3d { pointer-events: none; }
+.label3d { font-size: 12px; color: #dbe4ff; background: rgba(8, 12, 30, .7); border: 1px solid rgba(143, 194, 255, .25); padding: 1px 7px; border-radius: 999px; white-space: nowrap; }
+.label3d.you { color: #9fd0ff; border-color: rgba(143, 194, 255, .6); }
+.view3d-tools { position: absolute; right: 10px; bottom: 30px; display: flex; gap: 6px; z-index: 2; }
+.view3d-tools button { font-size: 12px; padding: 4px 10px; background: rgba(12, 18, 42, .82); border-color: var(--border); backdrop-filter: blur(4px); }
+.view3d-tools button.on { border-color: var(--accent); color: #cfe0ff; background: rgba(79, 140, 255, .3); }
+.view3d-note { position: absolute; left: 12px; right: 12px; bottom: 6px; margin: 0; font-size: 12px; color: var(--muted); text-align: right; pointer-events: none; text-shadow: 0 1px 2px #000; }
+.view3d.loading, .view3d.failed { display: grid; place-items: center; color: var(--muted); }
+.space .view3d { border-radius: 0; }
+@media (max-width: 800px) { .view3d-tools { bottom: 44px; flex-wrap: wrap; justify-content: flex-end; } }
+/* in the cockpit bar sound and animations are icons, with their words on hover and for screen readers */
+.cockpit-bar .view-toggles .mute .btn-text, .cockpit-bar .view-toggles .animations .btn-text { display: none; }
+.cockpit-bar .view-toggles .mute, .cockpit-bar .view-toggles .animations { font-size: 15px; padding: 3px 7px; }
+.label3d.you { transform: translateY(6px); }
+
+/* Stage 16: the home screen */
+.home { position: relative; text-align: left; max-width: 1100px; margin: 0 auto; }
+.space-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: radial-gradient(ellipse at 50% 120%, #10183d 0%, #070a18 55%, #04050d 100%); }
+.nebula { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55; animation: nebula-drift 28s ease-in-out infinite alternate; }
+.nebula.n1 { width: 620px; height: 520px; left: -140px; top: -160px; background: radial-gradient(circle, #3b2a8f 0%, transparent 70%); }
+.nebula.n2 { width: 560px; height: 480px; right: -160px; top: 80px; background: radial-gradient(circle, #0f5d8f 0%, transparent 70%); animation-duration: 34s; }
+.nebula.n3 { width: 700px; height: 420px; left: 30%; bottom: -260px; background: radial-gradient(circle, #6a2a7a 0%, transparent 70%); opacity: .4; animation-duration: 40s; }
+@keyframes nebula-drift { from { transform: translate(0, 0) scale(1); } to { transform: translate(40px, 30px) scale(1.08); } }
+.space-bg .twinkle { position: absolute; border-radius: 50%; background: #fff; opacity: .7; animation: twinkle 5s ease-in-out infinite; }
+@keyframes twinkle { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+.shooting { position: absolute; top: 14%; left: 70%; width: 120px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, rgba(255,255,255,.9), transparent); transform: rotate(-24deg); opacity: 0; animation: shoot 9s ease-in 3s infinite; }
+@keyframes shoot { 0% { opacity: 0; transform: translate(0, 0) rotate(-24deg); } 2% { opacity: 1; } 9% { opacity: 0; transform: translate(-420px, 190px) rotate(-24deg); } 100% { opacity: 0; transform: translate(-420px, 190px) rotate(-24deg); } }
+
+.home-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.pill { font-size: 12px; color: #cfe0ff; padding: 4px 12px; border-radius: 999px; border: 1px solid rgba(143, 194, 255, .3); background: rgba(79, 140, 255, .1); backdrop-filter: blur(6px); }
+.home-top .mute { background: rgba(255, 255, 255, .05); border-color: rgba(255, 255, 255, .12); backdrop-filter: blur(6px); }
+
+.hero { display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; align-items: center; }
+.eyebrow { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #8fc2ff; margin-bottom: 6px; }
+.home .title { font-size: 64px; line-height: 1.02; margin: 0 0 14px; font-weight: 800; letter-spacing: -.02em; text-shadow: 0 0 40px rgba(79, 140, 255, .25); }
+.title .grad { background: linear-gradient(90deg, #9fd0ff 0%, #8b8bff 50%, #d6a6ff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.home .lead { font-size: 18px; line-height: 1.5; color: #d6def5; max-width: 520px; margin: 0 0 18px; }
+.home .cta { gap: 10px; }
+.home button.big { margin: 0; border-radius: 12px; transition: transform .15s, box-shadow .15s, background .15s, border-color .15s; }
+.home button.big:hover { transform: translateY(-2px); }
+.home button.primary.big { background: linear-gradient(135deg, #4f8cff 0%, #7b6bff 100%); border: 0; color: #fff; box-shadow: 0 8px 28px rgba(91, 120, 255, .45), inset 0 1px 0 rgba(255,255,255,.25); }
+.home button.primary.big:hover { box-shadow: 0 12px 34px rgba(91, 120, 255, .6), inset 0 1px 0 rgba(255,255,255,.25); }
+.home button.ghost { background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14); backdrop-filter: blur(8px); }
+.home button.ghost:hover { background: rgba(255, 255, 255, .1); border-color: rgba(143, 194, 255, .5); }
+.mission-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; }
+.mission-chips .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; padding: 4px 12px; border-radius: 999px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .12); }
+.mission-chips .chip:hover { border-color: rgba(143, 194, 255, .6); background: rgba(79, 140, 255, .12); }
+.mission-chips .dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
+
+.orbit-art { width: 100%; max-width: 380px; justify-self: center; overflow: visible; filter: drop-shadow(0 0 30px rgba(79, 140, 255, .15)); }
+.orbit-art .ring { fill: none; stroke: rgba(143, 194, 255, .22); stroke-dasharray: 3 6; }
+.orbit-art .transfer { fill: none; stroke: rgba(143, 209, 255, .45); stroke-dasharray: 2 5; }
+.orbit-art .spin { transform-box: view-box; transform-origin: 180px 180px; animation: orbit-spin linear infinite; }
+.orbit-art .s1 { animation-duration: 12s; }
+.orbit-art .s2 { animation-duration: 22s; animation-delay: -6s; }
+.orbit-art .s3 { animation-duration: 46s; animation-delay: -20s; }
+.orbit-art .moon { transform-origin: 250px 180px; animation-duration: 3s; }
+.orbit-art .sun-glow { animation: sun-pulse 4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes orbit-spin { to { transform: rotate(-360deg); } }
+@keyframes sun-pulse { 0%, 100% { opacity: .85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+
+.home .howto { margin: 22px 0 10px; gap: 14px; }
+.home .howto li { background: linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02)); border: 1px solid rgba(255, 255, 255, .1); border-radius: 16px; padding: 16px 18px; backdrop-filter: blur(10px); transition: transform .2s, border-color .2s; }
+.home .howto li:hover { transform: translateY(-3px); border-color: rgba(143, 194, 255, .45); }
+.home .howto .step { width: 36px; height: 36px; border-radius: 10px; font-size: 18px; background: rgba(79, 140, 255, .18); border: 1px solid rgba(143, 194, 255, .35); }
+.home .howto b { font-size: 15px; }
+.home .tagline { text-align: center; font-size: 14px; margin: 6px 0 0; }
+
+@media (max-width: 800px) {
+  .hero { grid-template-columns: 1fr; }
+  .orbit-art { max-width: 260px; order: -1; }
+  .home .title { font-size: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nebula, .space-bg .twinkle, .shooting, .orbit-art .spin, .orbit-art .sun-glow { animation: none; }
+}
+.home button.big { padding: 12px 20px; font-size: 15px; }
+.home .cta { flex-wrap: wrap; }
+@media (min-width: 801px) { .hero { grid-template-columns: 1.4fr 1fr; } }
+/* on a tall screen the home sits in the middle, not stuck to the top */
+.home { min-height: calc(100vh - 84px); display: flex; flex-direction: column; justify-content: center; }
+.home-top { position: absolute; top: 0; left: 0; right: 0; }
+.home .hero { margin-top: 36px; }
+@media (max-width: 800px) { .home { min-height: 0; } .home-top { position: static; } .home .hero { margin-top: 0; } }
+
+/* ---------- Stage 17: Mission plan (goal + orbit) ---------- */
+.plan-screen { display: flex; flex-direction: column; gap: 10px; }
+.plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 800px) { .plan-grid { grid-template-columns: 1fr; } }
+.plan-grid h3 { margin: 0 0 6px; }
+.plan-grid > section > p { margin: 0 0 6px; }
+.plan-list { display: flex; flex-direction: column; gap: 6px; }
+.plan-card { align-items: center; gap: 12px; }
+.plan-card .opt-body { display: flex; flex-direction: column; gap: 2px; }
+.plan-icon { font-size: 28px; width: 44px; text-align: center; flex: none; }
+.orbit-pic { width: 72px; height: 58px; flex: none; }
+.orbit-pic-path { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 3 2; }
+.plan-go { justify-content: flex-end; }
+.affect.good, .affect.fit-great, .affect.fit-good { color: var(--ok); border-color: var(--ok); }
+.affect.fit-ok { color: var(--warn); border-color: var(--warn); }
+.affect.bad, .affect.fit-poor { color: var(--bad); border-color: var(--bad); }
+.plan-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.plan-line .small-btn { padding: 2px 10px; font-size: 13px; }
+.orbit-pic { width: 88px; height: 44px; }
+.orbit-pic-ship { fill: #fff; }
+.plan-why { margin-top: 12px; padding: 10px 14px; border: 1px dashed var(--border); border-radius: 10px; font-size: 14px; }
+.plan-why ul { margin: 4px 0 0; padding-left: 4px; list-style: none; display: flex; flex-direction: column; gap: 4px; }

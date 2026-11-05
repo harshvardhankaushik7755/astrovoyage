@@ -1,0 +1,79 @@
+{
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "roles": [
+    {
+      "id": "lead", "name": "Mission Lead", "icon": "🧭",
+      "job": "Keeps the mission on budget. Picks the spacecraft body, the rocket and the launch date.",
+      "owns": ["body", "rocket", "launch"],
+      "goal": "Keep at least {need} of the budget unspent",
+      "short": "{need} of budget left",
+      "why": "Real missions keep money in reserve. Surprises always cost something."
+    },
+    {
+      "id": "engineer", "name": "Spacecraft Engineer", "icon": "🔧",
+      "job": "Keeps the spacecraft alive. Picks the power source, the engine and the fuel.",
+      "owns": ["power", "engine"],
+      "goal": "Make at least {need} more power than the spacecraft uses",
+      "short": "{need} spare power",
+      "why": "Spare power (a power margin) keeps the spacecraft running when panels get dusty or parts get old."
+    },
+    {
+      "id": "science", "name": "Science Lead", "icon": "🔬",
+      "job": "Wants the best science. Picks the instruments.",
+      "owns": ["instruments"],
+      "goal": "Collect at least {need} science points",
+      "short": "{need} science points",
+      "why": "Science is why the mission exists. But every instrument adds mass, power, cost and data."
+    },
+    {
+      "id": "comms", "name": "Communications Lead", "icon": "📡",
+      "job": "Gets the data home. Picks the antenna.",
+      "owns": ["comms"],
+      "goal": "Send at least {need} of the science data back to Earth",
+      "short": "{need} of data home",
+      "why": "Science that never reaches Earth is lost. A bigger antenna sends more, but it is heavier and needs more power."
+    }
+  ],
+  "assignments": {
+    "2": [["lead", "engineer"], ["science", "comms"]],
+    "3": [["lead"], ["engineer"], ["science", "comms"]],
+    "4": [["lead"], ["engineer"], ["science"], ["comms"]]
+  },
+  "partOwner": { "body": "lead", "power": "engineer", "engine": "engineer", "instruments": "science", "antenna": "comms" },
+  "goals": {
+    "powerMargin": 0.2,
+    "dataHome": 0.9,
+    "byScenario": {
+      "moon": { "moneyLeft": 0.25, "science": 36 },
+      "mars": { "moneyLeft": 0.1, "science": 14 },
+      "jupiter": { "moneyLeft": 0.5, "science": 11 }
+    }
+  },
+  "scoring": { "pointsPerGoal": 10, "allGoalsBonus": 20 },
+  "text": {
+    "homeButton": "Play as a team (2–4)",
+    "setupTitle": "Build your mission team",
+    "setupLead": "Up to four people share one screen. Each person gets a job and a goal. The goals pull against each other, so you will have to talk it out.",
+    "nameLabel": "Player {n} name",
+    "addPlayer": "+ Add a player",
+    "removePlayer": "Remove",
+    "start": "Choose our mission →",
+    "back": "← Back",
+    "panelTitle": "Team goals",
+    "panelHint": "A goal can be met in many ways. There is no single right spacecraft.",
+    "owner": "{name}'s choice",
+    "signoffTitle": "Does everyone agree?",
+    "signoffHint": "Real mission teams only launch when every lead says \"go\". If anyone changes the design, everyone has to agree again.",
+    "signoffButton": "{name}: I agree, go!",
+    "signedButton": "{name}: go ✓",
+    "waiting": "Waiting for: {names}",
+    "yourCall": "{name}'s call · {role}",
+    "yourCallHint": "Talk with your team, but {name} has the final say.",
+    "resultTitle": "How the team did",
+    "teamScore": "Team score {total}: mission score {score} + {bonus} for team goals",
+    "allMet": "Every team goal met! +{bonus} bonus for working together.",
+    "met": "met",
+    "missed": "missed"
+  }
+}
