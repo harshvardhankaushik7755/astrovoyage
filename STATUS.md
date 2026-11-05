@@ -469,3 +469,12 @@ One entry per stage or fix, newest at the bottom. Format from CLAUDE.md.
   `package.json`/`package-lock.json` name, and the titles of README.md, CLAUDE.md and PROMPTS.md.
 - Kept on purpose: the file name `Mission_Architect_Game_Design_Document.docx`, because that is the real file.
 - Tests 466 passed, `npm run build` passed. Checked the Home page by eye.
+
+## 2026-11-05 — Online: GitHub Pages with auto-deploy
+- Live at https://harshvardhankaushik7755.github.io/astrovoyage/ · repo github.com/harshvardhankaushik7755/astrovoyage (public).
+- `.github/workflows/deploy.yml`: every push to `main` runs `npm ci`, `npm test`, `npm run build`, then publishes.
+  A failing test stops the deploy, so the last good version stays online. `vite.config.ts` reads `BASE_PATH`.
+- Decision: Node 26 on GitHub (same as the dev machine); Node 22's npm 10 rejected the lock file.
+- The online game has no AI server, so the Flight Director uses its built-in rules (the agreed fallback).
+- Checked the live site in a browser: Home, Mission plan, Design Lab, launch and the 3D view, no errors.
+- Open for Kunal: the repo is on Harshvardhan's account; add Kunal as a collaborator if he should push.

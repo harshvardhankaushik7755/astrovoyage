@@ -1,5 +1,7 @@
 # AstroVoyage
 
+**Play it online:** https://harshvardhankaushik7755.github.io/astrovoyage/ (updates by itself on every push to `main`, after the tests pass).
+
 A browser game for the NASA Space Apps Challenge 2026 challenge **"Space Mission Design Game"**.
 The player picks a mission, builds a spacecraft, checks the physics, and launches.
 
