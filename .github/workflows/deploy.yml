@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 26  # same as the dev machine; npm 10 (Node 22) reads the lock file differently
           cache: npm
       - run: npm ci
       - run: npm test
