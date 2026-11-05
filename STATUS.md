@@ -478,3 +478,10 @@ One entry per stage or fix, newest at the bottom. Format from CLAUDE.md.
 - The online game has no AI server, so the Flight Director uses its built-in rules (the agreed fallback).
 - Checked the live site in a browser: Home, Mission plan, Design Lab, launch and the 3D view, no errors.
 - Open for Kunal: the repo is on Harshvardhan's account; add Kunal as a collaborator if he should push.
+
+## 2026-11-05 — Fix: 3D spacecraft looked like a bare box
+- Cause: the solar wings were 4 mm-thin flat boxes, so from a side-on camera they vanished edge-on.
+  Now (`components/three/Flight3D.tsx`) they are thicker and turn on their long axis to face the Sun every
+  frame, like real wings. The angle maths is `panelAngle()` in `sim/scene3d.ts` (+2 tests).
+- Space view: the 3D camera buttons and hint were hidden under the bottom HUD row; moved above it (`styles.css`).
+- Tests 468 passed, `npm run build` passed. Checked follow view and a side view by screenshot.

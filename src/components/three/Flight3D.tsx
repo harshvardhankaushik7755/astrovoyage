@@ -13,7 +13,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import view from "../../data/view3d.json";
-import { parkingOffset, scene3d, type BodyKey, type Vec3 } from "../../sim/scene3d";
+import { panelAngle, parkingOffset, scene3d, type BodyKey, type Vec3 } from "../../sim/scene3d";
 import { shipLayout, type ShipPiece } from "../../sim/shipLayout";
 import type { SimState } from "../../sim/simulation";
 import type { Design } from "../../physics/checks";
@@ -112,15 +112,16 @@ export default function Flight3D(props: Flight3DProps) {
 
     // --- light: the Sun in the middle, or a far-away Sun for trips round Earth ---
     scene.add(new THREE.AmbientLight(0xffffff, view.lights.ambient));
-    if (s0.centre === "sun") {
+    // where the Sun is, for trips round Earth (null = the Sun sits at the centre of the scene)
+    const farSun = s0.centre === "sun" ? null : new THREE.Vector3(-1, 0.25, 0.6).normalize();
+    if (!farSun) {
       scene.add(new THREE.PointLight(0xfff4e0, view.lights.sun, 0, 0));
     } else {
-      const sunDir = new THREE.Vector3(-1, 0.25, 0.6).normalize();
       const light = new THREE.DirectionalLight(0xfff4e0, view.lights.sun * 0.9);
-      light.position.copy(sunDir.clone().multiplyScalar(50));
+      light.position.copy(farSun.clone().multiplyScalar(50));
       scene.add(light);
       const far = new THREE.Sprite(keep(new THREE.SpriteMaterial({ map: keep(glowTexture("#fff7d6", "rgba(255,190,80,0.6)")), blending: THREE.AdditiveBlending, depthWrite: false })));
-      far.position.copy(sunDir.multiplyScalar(view.starShell * 0.8));
+      far.position.copy(farSun.clone().multiplyScalar(view.starShell * 0.8));
       far.scale.setScalar(18);
       scene.add(far);
     }
@@ -255,6 +256,13 @@ export default function Flight3D(props: Flight3DProps) {
       ship.group.position.copy(pos);
       ship.heading = heading;
       ship.group.rotation.y = Math.atan2(-heading.z, heading.x);
+      // the solar wings turn on their long axis to face the Sun, as real ones do, so they never hide edge-on
+      if (ship.panels.length) {
+        const toSun = farSun ? farSun.clone() : pos.clone().negate().normalize();
+        toSun.applyAxisAngle(UP, -ship.group.rotation.y); // into the spacecraft's own frame
+        const angle = panelAngle(toSun.x, toSun.y);
+        for (const w of ship.panels) w.rotation.z = angle;
+      }
       marker.position.copy(pos);
       marker.material.opacity = 0.75 + 0.25 * Math.sin(t * 3);
       // below the spacecraft, so it never sits on a planet's name above it (they start side by side at launch)
@@ -322,6 +330,7 @@ export default function Flight3D(props: Flight3DProps) {
 }
 
 const v3 = (v: Vec3) => new THREE.Vector3(v.x, v.y, v.z);
+const UP = new THREE.Vector3(0, 1, 0);
 
 function mulberry(seed: number) {
   let a = seed;
@@ -371,13 +380,13 @@ function buildShip(design: Design, env: THREE.Texture, keep: <D extends { dispos
     return m;
   };
   const alongX = (m: THREE.Mesh) => { m.rotation.z = Math.PI / 2; return m; };
+  const panels: THREE.Mesh[] = [];
   for (const p of layout.pieces) {
     const w = p.w * u, h = p.h * u;
     if (p.shape === "bus") add(new THREE.BoxGeometry(w, h * 0.9, h), mats.bus, p);
     else if (p.shape === "panel") {
-      const m = add(new THREE.BoxGeometry(w, 0.004, h), mats.panel, p);
+      panels.push(add(new THREE.BoxGeometry(w, 0.012, h), mats.panel, p));
       panelMap.repeat.set(1, Math.max(1, Math.round(p.h / p.w)));
-      m.rotation.x = 0.15; // tilted a touch towards the light, as real wings are
     } else if (p.shape === "rtg") alongX(add(new THREE.CylinderGeometry(h / 2, h / 2, w, 16), mats.rtg, p));
     else if (p.shape === "mast") add(new THREE.BoxGeometry(w, 0.006, 0.006), mats.grey, p);
     else if (p.shape === "dish") {
@@ -405,5 +414,5 @@ function buildShip(design: Design, env: THREE.Texture, keep: <D extends { dispos
   // bigger designs are drawn bigger, but no spacecraft is lost in the dark
   const size = Math.max(layout.w, layout.h) * u;
   group.scale.setScalar(Math.max(1, 0.22 / size));
-  return { group, flame: flameHolder, ion, heading: { x: 1, y: 0, z: 0 } as Vec3 };
+  return { group, flame: flameHolder, ion, panels, heading: { x: 1, y: 0, z: 0 } as Vec3 };
 }

@@ -922,3 +922,7 @@ button.fuel-fill { padding: 4px 10px; font-size: 13px; border-color: var(--accen
 .orbit-pic-ship { fill: #fff; }
 .plan-why { margin-top: 12px; padding: 10px 14px; border: 1px dashed var(--border); border-radius: 10px; font-size: 14px; }
 .plan-why ul { margin: 4px 0 0; padding-left: 4px; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+/* space view: the 3D camera buttons and hint sit above the bottom HUD row, not under it */
+.space .view3d-tools { bottom: 78px; }
+.space .view3d-note { bottom: 112px; }
+@media (max-width: 800px) { .space .view3d-tools { bottom: 92px; } .space .view3d-note { bottom: 130px; } }

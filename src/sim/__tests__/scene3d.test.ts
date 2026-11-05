@@ -3,7 +3,7 @@ import view from "../../data/view3d.json";
 import scenarios from "../../data/scenarios.json";
 import { runChecks, findScenario, type Design } from "../../physics/checks";
 import { createSimulation, step, transferPath, EARTH_ORBIT_AU, type SimState } from "../simulation";
-import { parkingOffset, scene3d, targetBodyFor, toVec } from "../scene3d";
+import { panelAngle, parkingOffset, scene3d, targetBodyFor, toVec } from "../scene3d";
 
 function flying(id: string, fraction: number): SimState {
   const sc = findScenario(id);
@@ -82,5 +82,21 @@ describe("scene3d: the flat map lifted into space", () => {
       const o = parkingOffset(t, radius);
       expect(Math.hypot(o.x, o.z)).toBeCloseTo(radius * view.ship.parkingOrbit, 6);
     }
+  });
+});
+
+describe("solar wings face the Sun", () => {
+  const face = (a: number) => ({ x: -Math.sin(a), y: Math.cos(a) });
+  it("a wing turned by panelAngle points its face at the Sun", () => {
+    for (const [x, y] of [[0, 1], [1, 0], [-1, 0], [0.6, 0.8], [-0.3, -0.95]]) {
+      const n = face(panelAngle(x, y));
+      const len = Math.hypot(x, y);
+      expect(n.x).toBeCloseTo(x / len, 10);
+      expect(n.y).toBeCloseTo(y / len, 10);
+    }
+  });
+  it("lies flat when the Sun is straight above, and stands up when the Sun is ahead", () => {
+    expect(panelAngle(0, 1)).toBeCloseTo(0, 10);
+    expect(Math.abs(panelAngle(1, 0))).toBeCloseTo(Math.PI / 2, 10);
   });
 });

@@ -80,3 +80,12 @@ export function parkingOffset(t: number, planetRadius: number): Vec3 {
   // tilted a little out of the orbit plane, so it reads as going round, not sliding side to side
   return { x: r * Math.cos(a), y: r * 0.35 * Math.sin(a), z: -r * Math.sin(a) };
 }
+
+/**
+ * How far to turn a solar wing about its long axis so its face points at the Sun.
+ * (sunX, sunY) is the direction to the Sun in the spacecraft's own frame (x = nose, y = up); the wing lies flat
+ * (facing +y) at 0. Turning by θ about the long axis points the face along (−sin θ, cos θ), so θ = atan2(−x, y).
+ */
+export function panelAngle(sunX: number, sunY: number): number {
+  return Math.atan2(-sunX, sunY);
+}
